@@ -1,0 +1,301 @@
+JavaScript Essential Training
+=============================
+Instructor: Morten Rand-Hendriksen
+==================================
+
+What is JavaScript?
+-------------------
+Javascript is a high-level dynamic untyped and interpreted programming language standardized in the ECMAScript Language Specification. One of the three core web technologies to build website content. Javascript is basically the actions of the websites. It makes the website dynamic or interactive. JavaScript is a scripting language that helps to change and work with HTML and CSS.
+
+Java vs. JavaScript
+-------------------
+Java is a programming language used to create applications. On the other hand JavaScript is a scripting language. They are completly different languages.
+
+Tid-Bits
+--------
+ECMAScript: Javascript conforms to ECMAScript which is a standard, not a language. Browsers use ECMAScript to interpret JavaScript. The new version is ES6 or ECMASCript 2015. However, the browsers are still not compatible with the updated version of ECMAScript and use ECMAScript 5.1(2011). If someone writes code in ES6 then they can transpile the script through babel and like websites. 
+
+JQuery: A library for JavaScript functions. Library of small programs.
+JavaScript Frameworks: AngularJS, React, Vue.js and so on are front-end application frameworks used to simplify the building of advanced interactive web-based applications.
+
+Jode.js: JavaScript platform built on browser runtime environment. Used to run advanced operations and applications on servers and computers using JS.
+
+Inline JS vs. Seperate File
+---------------------------
+Inline JS when it is placed in the HTML document. This is good for small script. However, for a large JS file, we would want to seperate the JS from the HTML file.
+
+In the HTML file, we have to include the <script> tag to link the script to the HTML.
+
+Render Blocking
+---------------
+The HTML runs the codes line-by-line. So, if a script is added in the HTML file then it may wait for the JS or Script file to download first and then execute the rest of the HTML. This is called render blocking. To avoid this we can do one of the two things:
+		1. Add the script link at the bottom of the HTML
+		2. Add defer attribute to the script like this:
+			<script src="script.js" defer></script>
+How to write good JS:
+---------------------
+	1. JS is case-sensitive
+	2. Naming convention for variable, function, method is camelCase.
+	3. Naming convention for Class and Object is Capitalized
+	4. Naming convention for constant is ALL caps
+	5. JS doesnt care about whitespace, but human do. So, indent.
+	6. End each statement with semicolon. JS doesn't care for semicolon. However, semicolon can increase readability
+	7. User comments when needed (// single line or /**/ multiline)
+Variables
+---------
+The most common type of contrainer to hold information. Variables are declared like this:
+		var variable_name;
+By default the value stored in the variable is empty/undefined. We can assign a value to it using the "equal" symbol. Names of the variables must follow the following rules:
+	1. Cannot start with a number but can contain a number
+	2. Cannot have symbols except for underscore (_) and dollar sign ($)
+	3. Cannot use the reserved words, like function, var, 
+There are two types of variable:
+	1. Global Variable: A variable that can be accessed by any function or classes from anywhere within the code. This variable is declared outside the scope of any function. Any variable declaration without the "var" keyword is also considered as global function.
+	2. Local Code: A variable that have a limited scope and cannot be accessed from outside that scope. Usually, this type of variables are declared within a function or codeblock.
+Variables in ECMAScript 2015: In ECMAScript 2015 there are two additional ways to declare variables. Where previously, we could declare variable using only 'var' keyword; now, we have two more keyword:
+	1. const: Declares a constant. Its value cannot be changed once it has been declare.
+	2. let: This type has a block scope variable, which is a smaller scope than 'var'.
+Scope of var vs. let: The 'var' has a scope greater than the 'let'. Variables declared with the 'var' in the parent code block can be accessed by child code blocks. However, the variables declare within the child code block can't be accessed by the parent code block. In case of 'let', variables declared within the parent code block cannot be accessed by the child code block and vice versa.
+Data Types
+----------
+There are six primitive data types:
+	1. Numeric: Any regular number, decimal, negative number.
+	2. String: Strings of letters. Single/double quote can be used. We can put single quotes inside double quotes to represent quotations. Another way is to escape a particular character with the backward slash (\) symbol. 
+	3. Boolean: Binary true or false.
+	4. Null: Intentional absence of a data.
+	5. undefined: Create a variable to initialize it.
+	6. Symbol (introduced ECMA 2015)
+Operators
+---------
+	=		Assigns a value to a variable
+	+		Addition
+	-		Subtraction
+	*		Multiplication
+	/		Division
+	%		Modular
+
+Longhand opertors are usage of operators in normal or general way. Like:
+		a + b
+		a + 4
+		a * 10
+Shorthand operators are unique cases where a particular operation is performed on a variable and the result is stored in the same variable. In this case, the follwing symbols are used:
+		+=		-=		*=		/=
+These symbols are used like following:
+		a +=4
+		b -=2
+		c *=3
+		e /=6
+Prefix - unary operator are used to increase or decrease the value of a variable by 1 AFTER THE VALUE HAS BEEN ASSIGNED.
+			symbol 				Example
+		++ (increament)			a++ means a+=1 or a = a+1
+		-- (decrement)			b-- means b-=1 or b = b-1
+Post - unary operators are used to increase or decrease the value of the variable by 1 BEFORE THE VALUE HAS BEEN ASSIGNED.
+		++ (increament)			++a means a+=1 or a = a+1
+		-- (decrement)			--b means b-=1 or b = b-1
+The plus sign can aslo act as a concatanation symbol if either of the operands it has is string. 
+		"a" + 1  will result in a1
+Other mathematical operators works only one way and are not 'overloaded'. So, if someone write a statement like 'b'-1, they will get an error 'NaN' or 'Not a Number'.
+Logic Operators
+---------------
+		== 		compares two values on either side of operator
+		AND 	returns true if all the operands are true
+		OR 		returns true if anyon of the operators are true
+
+Conditionals and Logic
+----------------------
+If statement:
+	if(condition){
+		do something;
+	}
+	if else (condition2){
+		do something else;
+	}
+	else{
+		do something else;
+	}
+Ternary Operator
+----------------
+The syntax for ternary operator is:
+	condition ? true : false
+Array
+-----
+Arrays are used to store multiple things of the same type, preferrablly. Different types of things can be put into the array but it is not recommended. An array can be created with the following syntax:
+	var array_name = ['tomato','potato','cucumber','carrot'];
+Each of the values placed into array are put into a different slot and given an index number. The index number starts with zero and continues. To access a particular position in the array we need to refer to the index value it has. For example, to access the 3rd value of the array we can write the following code:
+	array_name[2]
+Here the index number is in the brackets. As the index number starts from 0, the third index position is represented by 2. 
+Array Property and Methods
+--------------------------
+Arrays are objects. In JS, objects has properties and methods. Properties are meta information about the object. Methods are functions that belong to the object. The most popular array property and methods are:
+	length			property 			array_name.length			the length of the array
+	reverse()		method 				array_name.reverse()		reverses the array
+	shift()			method 				array_name.shift()			removes the first item from the array
+	unshift() 		method 				array_name.unshift('a')		adds the item to beginning of the array
+	pop()			method 				array_name.pop()			removes the last item from the array
+	push()			method 				array_name.push('a')		adds the item to the end of array
+	splice()		method 				array_name.splice(pos,n)	removes 'n' number of items from pos position
+	slice()			method 				array_name.slice()			returns a copy of the array
+	indexOf()		method 				array_name.indexOf('a',pos)	returns index position of 'a' after searching from pos position
+	join()			method 				array_name.join(', ')		returns all the array items seperated by ', '
+Functions
+---------
+Functions are mini programs. They are pieces of code that perform a highly cohesive task. Functions do one of two things; either create content on a webpage or provide a return value. There are three types of functions:
+	1. Named functions or declarative approach of creating function
+			function function_name (parameters){}
+	2. Anonymous functions or assignment approach of creating function
+			var variable_name = function(parameters){}
+	3. Immediately invoked function expression: the browser runs the function whenever it encounters it.
+			(function(parameter)){}()
+Most of the functions come with 'parameters' that are arguments that can be passed to the functions to work with from within the function. Additionally, functions can return values that can be stored in a variable in the main code and used later.
+Objects
+-------
+Objects are a data type that we create a cluster of related data for something and if want to perform some action on those data. We can create objects two ways. The first method is:
+	var object_name = new Object();
+	object_name.title = "JavaScript Essential Training";
+	object_name.instructor = "Morten Rand-Hendriksen";
+	object_name.level = 1;
+	object_name.views = 0;
+	object_name.updateViews = function(){
+		return ++course.views;
+	}
+The other method of creating object is:
+	var object_name = {
+		title: "JavaScript Essential Training",
+		instructor: "Morten Rand-Hendriksen",
+		level: 1,
+		views: 0,
+		updateViews: function(){
+			return ++course.views;
+		}
+	}
+Object Constructors
+-------------------
+Object Constructors are templates for creating objects that we define once and use repeatedly. The object constructors are functions. So, we can write constructors like following:
+	function Course(title, instructor, level, views){
+		this.title = title;
+		this.instructor = instructor;
+		this.level = level;
+		this.views = views;
+		this.updateViews = function(){
+			return ++this.views;
+		};
+	}
+We can create objects from object constructors like following:
+	var course01 = new Course("JavaScript Essential Training","Morten Rand-Hendriksen",1,0);
+Closures
+--------
+Closures are nested functions that is function inside function. The nested function relies on the variables declaired in the outer function. 
+		function giveMeEms(pixels){
+			var baseValue = 16;
+			function doTheMath() {
+				return pixels/baseValues;
+			}
+			return doTheMath;
+		}
+		var smallSize = giveMeEms(12);
+		console.log("Small Size: ", smallSize());
+Document Object Model
+---------------------
+The browser itself is a object. The browser has a lot of object inside it, like the navigation buttons, the document it is displaying, and so on. These objects are model according to Browser Object Model (BOM). We can communicate with these object like any other object. Window is the top level object. To know about all the properties and methods of window object, refer to:
+	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
+One of the property in the window object is the Document object. You can call the property by typing window.document. However, as JS reside in the window object, you can refer to document object/property directly by typing 'document'. Document also has its own object model which is called "Document Object Model (DOM)". DOM is the model of the document that forms the current webpage. In HTML, every element is wrapped around a beginning and ending tag, creating an HTML element. Each of these elements is a DOM Node and the browser handles each of them as it would handle an object. The Node tree is the hierarchical model that shows the element in a HTML document.
+DOM Properties and methods
+--------------------------
+There are some properties of the DOM like:
+		document.body;
+		document.title;
+		document.URL;
+To get the elements or group of elements in the body of the document we can use different methods that are available to the document object. Most popular methods are:
+		document.getElementById("someID"): gets element by specific ID
+		document.getElementByClassName("className"): gets all elements with a specified class name as array
+		document.getElementsByTagName("HTML Tag"): get all elements with a specified HTML tag as array
+		document.getElementsbyTagNameNS();
+		document.querySelector(".main-nav a"): get the first element matching specified selectors
+		document.querySelectorAll(".post-content p"): get all elements matching specified selectors
+For the querySelector and querySelectorAll, use a dot(.) to represent a class and hash-tag (#) to represent a id, like a CSS selector.
+	refer to: https://developer.mozilla.org/en-US/docs/Web/API/document
+Access and Change Elements
+--------------------------
+The whole purpose of targeting a DOM element in the JS is to access and change the properties of the element. The complete list of elements can be accessed from the following link.
+	Refert to: developer.mozilla.org/en-US/docs/Web/API/Element
+		.innerHTML		returns the value within the HTML tag, can be used to change the value that the HTML tag has (.innerHTML = "Whatever value")
+		.outerHTML		returns the tag and value of parent tag
+		.id				returns the id of a class, can be used to change ID
+		.className		returns the names of class as string
+		.classList		returns the names of class in array
+Access and Change Classes
+-------------------------
+To change the read only properties of classes, we use methods to access and change those properties.
+		.add("class_name")		add the "class_name" to the current object
+		.remove("class_name")	removes the class_name from current object
+		.toggle("class_name")	toggles the class_name (add or delete)
+		.contains("class_name")	checks whether a particular class is there
+Access and Change Attributes
+----------------------------
+The Attribute property is read-only like class list. So, to change attributes we need to use methods. There are four methods:
+		.hasAttribute()			returns whether an attribute is present
+		.getAttribute()			returns the value of the attribute
+		.setAttribute()			sets or add a attribute
+		.removeAttribute()		removes a specified attribute
+Add DOM Element
+---------------
+DOM elements can be added using the innerHTML and outerHTML commands. Howerver, these are not efficient tools for this job. To do this efficient and most effective way, we need to follow these steps:
+		1. Create the element
+				This is done with .createElement() method
+		2. Create text node that goes inside the element
+				This is done with .createTextNode() method
+		3. Add the text node to the element
+				This is done by .appendChild() method
+		4. Add the element to the DOM tree
+				This is done by .appendChild() method
+There is a new method called .append() that creates and appends string to an element. 
+Apply to CSS to element
+-----------------------
+JS can also be used to apply custom CSS to HTML elements. When we apply style to an element using JS, the browser add inline styling to the element. So, we can add any CSS property to any element via JS using the style attribute, which can be accessed like any other element property. We can add an attribute like this:
+		.style.color = "green"
+This works for all the single word attributes. However, the two-word attributes must by camelCased in JS, like this:
+		.style.backgroundColor = "blue"
+Changin the attribute only changes the attribute we are dealing with in JS, not the whole string of element. The disadvantage of this is that to add multiple attribute, we have to do that in multiple individual statements. However, we can add multiple attributes by adding .cssText() method.
+		.style.cssText = "padding: 1em; color: white; background-color: red;"
+If we look what an inline CSS is, we would see that inline CSS is actually an attribute, specifically, 'style' attribute. So, we should be able to apply the methods that work on the attributes, hasAttribute(), getAttribute(), setAttribute, and removeAttribute().
+		.setAttribute("style","padding: 2em; color: green")
+The inline styles overwrite all that the styleis doing. It is better to have a clear definition of how each class should be styled and 
+DOM Events
+----------
+Whatever actions are performed in webpage and browser are evetns. Events are used to make the webpages more interactive. Events can trigger functions and methods when a particular event happens. The formula for building JS functionality around events is called "Event Handling". This followes the following steps:
+		1. Identify the DOM node the interactive behaviour will be attached
+		2. Identify the event that you want to detect
+		3. Bind that that to the DOM Node
+		4. Create the function that is invoked as the event occur
+Typical Events
+--------------
+We have primarily two types of events:
+		1. Browser-level events: Browser behavior (load, resize, etc.)
+		2. DOM-level events: Content interaction (click, focus, submit, etc.)
+For comprehensive list:
+		Refer to: https://developer.mozilla.org/en-US/docs/Web/Events
+Most popular events are:
+		Browser-level:
+			load: the the resource and dependencies have finished loading
+			error: when a resource failed to load
+			Online/offline: when the browser is online/offline
+			resize: when viewport is resized
+			scroll: when a viewport is scrolled (up/down/left/right)
+		DOM Events:
+			focus: when element receives focus (clicked, tabbed, etc.)
+			blur: when element loses focus (leaving form field, etc.)
+			reset/submit: form specific events
+			mouse events: click, mouseover, drag, drop, etc.
+		Other events:
+			media events: related to audio/video playback
+			progress events: monitor ongoing browser progress
+			CSS transition events: transition start/run/end
+Adding function to an Event
+---------------------------
+First we may want to write the function that will be hooked to an event handler. Then we assign the function to the event handler without the brackets. Like this:
+		cta.onclick = reveal;
+If you bind more than one thing using the event handler, the code will break and the last event handler will take precedence. To add multiple events to an event we add a newer method that is called 'Event Listener'.
+		.addEventListener("click",reveal,false)
+For more advanced stuff on this refer to:
+	https://www.w3.org/TR/DOM-level-3-Events/#event-flow
+Event listners can used to constantly monitor for events. 

@@ -1,0 +1,136 @@
+Configuring GIT
+---------------
+There are 3 levels of configeration for git:	
+	1. System level config: /etc/gitconfi,
+		git config --system
+	2. User level config: ~/.gitconfig
+		git config --global
+	3. Project level config: <my_project>/.git/config
+		git config
+Commands
+--------
+git config --global user.name "<name>" [set the user name]
+git config --global user.email "<email@domain.com" [set the user email]
+git config --list [show list of config]
+git config user.name [show user name]
+git config user.email [show user email address]
+git config --global core.editor "<name of text editor>" [set the defualt text editor]
+git config  --global color.ui true [set the color of user interface]
+git help [display help command]
+git help <command> [display help on a specific command, same as "man git-log"]
+git init [initialize the git for a project]
+git add . [adding the current directory to git]
+git commit -m "<message for the commit>"
+git commit -am "<message for commit>" [transfers all file from working to commit]
+git commit --amend -m "<message for commit>" [change the last commit]
+git log [displays the logs of commits]
+git log -n <number> [displays the <number> of logs]
+git log --since=2012-06-14 [displays log since the date]
+git log --until=2012-06-12 [displays log until the date]
+git log --sinnce"2 weeks ago" --until "2 days ago" [displays all logs from 3 weeks ago to 3 days ago]
+git log --author="<user name>" [displays commits by a user]
+git log --grep="init" [displays commits using the grep]
+git log --oneline [displays the log just in one lines]
+git log --oneline -3 [displays 3 logs]
+git log <sha1>..<sha2> [displays logs between two hash/sha]
+git log <sha1>.. <file name> [displays logs for the file from sha1 to now]
+git log -p [shows diff of what happened to each one of the files]
+git log --stat --summary
+git log --format=oneline [displays one line commit with full sha]
+git log --format=short
+git log --format=full
+git log --format=fuller
+git log --format==email
+git log --format==raw
+git log --graph
+git log --oneline --graph --all --decorate
+git show <sha/hash> [displays details of a particular commit]
+git status [displays difference between working directory, staging index and repository]
+git diff [displays the diffence between the new version and the old verstion]
+git diff --staged [displays difference for files in stage]
+git diff --cached [older version of git diff]
+git diff --color-words <file name> [displays the difference word by word]
+git diff <sha/hash> [displays the comparing two directories between that commit and now]
+git diff <sha/hash> <file name> [displays the comparison only for a particular file]
+git diff <sha1/hash1>..<sha2/hash2> [displays the comparison between commits]
+git diff <sha/hash>..HEAD [displays the comparison between a commit and HEAD]
+git diff <sha/hash>..HEAD^^ [displays the comparison between a commit and grandparent]
+git diff --stat --sumamry <sha/hash>..HEAD [displasy summary and stat between a commit and the HEAD]
+git diff --ignore=space=change <sha/hash>..HEAD [ignores the changes in space]
+git diff -b <sha/hash>..HEAD [ignores the changes in space]
+git diff --ignore=all=space <sha/hash>..HEAD [ignores all changes in space]
+git diff -w <sha/hash>..HEAD [ignores all changes in space]
+git diff <branch1>..<branch2> [compares difference between two branches]
+git rm <file name> [updates the staging area for a file deletion in working stage, this needs to be followed by a commit command]
+git mv <src file> <dst file> [moves the src file to dst file or renames it and later passes it to the staging stage]
+git checkout -- index.html [replace this file from repository on the same branch, undo the changes in the working directory]
+git checkout <part of HASH> -- <file name> [get a old commit file to the working directory from the repository]
+git reset HEAD <file name> [undo changes to the staging area]
+git reset HEAD --soft <file name> [change the HEAD to different place]
+git reset HEAD --mixed <file name> [change HEAD to match repository, changes the stagin but not the working directory]
+git reset HEAD --hard <file name> [change staging index and working directory to match repository]
+git revert  <part of HASH> [undo the changes of a commit and pushes the project to commit]
+git revert -n <part of HASH> [undo the changes of a commit and pushes the project ONLY to staging]
+git clean -n [clean is used to delete all the files that are not tracked by git, check which files will be removed]
+git clear -f [actually deletes all the files that are not tracked by git]
+
+
+GIT Ignore
+----------
+In git if someone doesn't want to add a file to the git, because the file may be temporary or a log file, he/she has to create a new file called ".gitignore" inside the project directory. For example: project/.gitignore. We can use regex to define the file name. For example: *, [abc], [0-9], !index.php (not ignore), assets/videos/ (all files in the directory structure). Comment lines begin with # and blank lines are skipped. What you might not want to include in GIT:
+	1. Compiled source code
+	2. Packages and compressed files
+	3. Logs and databases
+	4. Operating system generated files
+	5. User uploaded assests (images, PDFs, videos)
+refer to: 	https://help.github.com/articles/ignoring-files
+		https://github.com/github/gitignore
+We can also ignore files globally through configuring the git globally. This will not be in the project rather user-specific. This can be done:
+	git config --global core.excludesfile ~/.gitignore_global
+
+Ignoring files that git is already tracking, doesn't work in the similar way. 
+	git rm --cached <file name>
+Git keeps track of files not directories. It treats directories as paths to get to the files. So, if a directory is empty, git will not keep track of that unless therre is a file. It does not matter how small that file is, as long as there is a file in the directory, git will track it.
+
+Ancestry commit
+-------------
+Parent commit: HEAD^, acf87504^, master^, HEAD~1, HEAD~
+Grandparent commit: HEAD^^, acf87504^^, master^^, HEAD~2
+great-grandparent commit: HEAD^^, acf87504^^, master^^, HEAD~3
+
+Branching
+---------
+With branches, you can try new things. You can create a branch to try out new idea. If the idea works out, you can keep the branch or merge it with the master and if the idea does not work out, you can just discard the branch. 
+
+	git branch [displays all the current branches]
+	git branch <name of the branch> [creates a new branch]
+	git checkout <name of the branch> [switch to new branch]
+	git checkout -b <name of the branch> [create and check new branch]
+	git diff <branch1>..<branch2> [compares two branches]
+	git diff --color-words <branch1>..<branch2> [compares two branches]
+	git branch --merged [displays all the branches that are completely in current branch]
+	git branch --move (or -m) <src name> <dst name> [renaming a branch from src to dst]
+	git branch --delete (or -d) <branch name> [deletes a branch]
+	git branch -D <branch name> [force delete a branch, even without uncommited changes]
+	git merge <name of the branch> [merges the branch with master]
+	git merge --no-ff <name of the brach> [avoid doing a fast-forward merge]
+	git merge --ff-only <name of the branch> [do the merge only if fast-forward is possible; otherwise abort]
+
+Remotes
+-------
+Connect a remote server with our local repository. We "Push" our repository to the remote server; that is we copy our repository to the remote server. When we "push" our repository, another branch is created on our local repository that is a copy of the remote server, which tries to stay in sync with the remote server. When other people make changes to the remote server, we need to pull those down through "fetch". "Fetch" is virtually coping the remote server to our origin branch but doesn't merge that in our master branch. 
+	git remote
+	git remote add <alias> <url> [create a new remote server with from the url and give that a local alias]
+	git remote -v [detailed info with url for the remote server]
+	git push -u <alias> <branch> [pushes a branch to the alias]
+	git clone <url of repo> [cloning a repository from the remote]
+	git push [push the changes of a repo that is already tracked]
+	git fetch <alias> [fetches the changes from remote repo]
+	git fetch [fetches the changes from remote repo]
+	git merge origin/master [marging the orgin/master to the master in local]
+	git pull [equivalent to git fetch + git merge]
+	git branch <name of new branch> <origin or sha> [create a new branch in the origin/master]
+	git branch -d <branch name> [deletes a branch locally]
+	git checkout -b <branch name> <origin or sha> [create a new branch in origin and checkout to it]
+	git push <origin> :<branch name> [delete a branch from the remote server]
+	git push <origin> --delete <branch name> [delete a branch from remote server]

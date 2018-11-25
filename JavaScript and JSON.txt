@@ -1,0 +1,50 @@
+JavaScript and JSON
+===================
+Ray Villalobos (lynda.com)
+==========================
+What is JSON?
+-------------
+JavaScript Object Notation is derived from JS. It helps format for sharing data. It is close to JS Objects. It is language independent. It is easy to parse, which means that JS can easily read from JSON objects. It is also leaner and easier to parse thatn XML. 
+Understanding JSON and Object
+-----------------------------
+JSON strings are name and value pairs. The keys are wrapped in double-quotes (""). It can read special characters as well but this may make the data harder to read. JSON values have to be one of six data types. 
+	1. String
+	2. Number
+	3. Objects
+	4. Arrrays
+	5. Boolean
+	6. NULL
+JS objects can, on the other hand, be any valid JS data type. On JS Objects keys dont have double quotes around it. A JSON object needs to be fed as string into a variable and then parsed. There are few ways to do that. 
+	1. eval() function
+	2. JSON.parse
+	3. JSON.strinify does the opposit (alternative jQuery)
+Creating simple Data
+--------------------
+The most common type is key and value pairs. For example:
+	var info = {
+		"full_name": "Hussain Islam",
+		"title": "Staff Author",
+		"company": "lynda.com",
+		"quantity": 3
+	}
+We can use both the dot notation or the bracket notation to access the data, just like JS objects. 
+	console.log(info.full_name);
+	or
+	console.log(info["full_name"]);
+The second option can be used if the key names don't have valid JS names, like: Full Name.
+Objects can also contain arrays, which is accessed using the index number. 
+Using JS and JSON Tools
+-----------------------
+
+
+
+
+References
+----------
+	Check JS code: www.jshint.com
+	Check JSON: www.jsonlint.com
+	Edits JSON: jsoneditoronline.org
+	Offline JSON Editor: jsonpad.com
+	Chrome/Firefox addon to see JSON: JSONView
+	Pulling JSON from Wordpress: goo.gl/hldXy
+

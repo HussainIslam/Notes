@@ -1,0 +1,200 @@
+SQL - Full course for Beginners
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+freeCodeCamp.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What is a Database (DB)?
+------------------------
+It is basically any collection of related information. Computers are great at keeping track of large amounts of information. 
+
+Database Management Systems (DBMS)
+----------------------------------
+A special software that helps the users to create and maintain a database. It is not the actual database rather it is the software that maintains the database.
+
+CRUD = Create Read Update Delete
+--------------------------------
+This are the four basic applications for a DBMS.
+
+Types of Database
+-----------------
+There are two types of databases. They are:
+	1. Relational Databases (SQL): Most popular
+	2. Non-Relational Database (noSQL): Anything by tables.
+
+Relational Database (SQL)
+-------------------------
+These are the databases that have a relation among them. They may be connected through a key unique identifier. Softwares that manage the databases are called Relational Database Management Systems (RDBMS). For example: mySQL, Oracle, postgreSQL, mariaDB, etc.
+
+This uses Structured Query Language (SQL), which is standardized language for interacting with RDBMS. This is used to define tables and structures. RDBMS softwares implement SQL little differently.
+
+Non-relational Database
+-----------------------
+Database that stores information in a non-relationship way. For example, json, xml, etc. It could be document, graph, key-value HASH. Non-relational Database Management Systems (NRDBMS) are mongoDB, dynamoDB, apache cassandra. NRDBMS dont have a standardized language; so the softwares implement their own lanuage.
+
+Database Queries
+----------------
+Queries are requests made to the database management system for specific information. As the DB structure gets more and more complex, it becomes more difficult to get the specific piece of information. For example, google search is a query.
+
+Tables and Keys
+---------------
+All tables in the RDBMS has columns and rows. A column would define a single attribute/field of the database. A row is an individual entry or record. We also need to create a unique key field. This key is unique for each of the records and will be used a primary key. This primary key distinguishes between two different records. It can be anything alphabet, number or a mix but it has be unique.
+
+	Surrogate Key: It is key that doesn't have any mapping in the natural world. For examle, if we assign a serial number to each of the record. 
+	Natural Key: This has a mapping or purpose in the real world not just the database, for example social security number. 
+	Foreign Key: It is a key that can connect one database table with another database table. A table can have multiple foreign keys.
+	Composite Key: A key that needs at lease two fields. For example, branch_id and supplier_name, both of these fields together can uniquely identify each row.
+
+SQL Basics
+----------
+It is a language used to interact with relational database. It is technically a programming language but it is a standardized language. SQL can be used to CRUD. So, we can also create and manage databases, design and create database tables, perform administration tasks (security, user management, import/export, etc). SQL implementations vary between systems. The concepts are same but implementations are little different. 
+
+Its basically a hybrid language. This is 4 language in one:
+	Data Query Language (DQL): Used to query and get information from DB
+	Data Definition Language (DDL): Used to define DB schemas.
+	Data Control Language (DCL): Used for controlling access and permission
+	Data Manipulation Language (DML): Used for modifying data
+
+Queries: A set of instruction given to the RDBMS (written in SQL) that tell the RDBMS what information you want it to retrieve for you. The goal is to get only the information that you need. 
+
+Tools: There are two tools that you can use to work with sql:
+		1. mySQL Community verions: dev.mysql.com
+		2. SQL editor: popsql.io
+
+Table:
+------
+Before we start putting information in the database, we need to create tables, inside which we will put the information.
+The most common data types in the table are:
+	INT: Whole number
+	DECIMAL(M,N): Decimal Number; M is total number of digits, N is precision
+	VARCHAR(l): String of text of length l
+	BLOB: Binary Large Object, Stores large data
+	DATE: YYYY-MM-DD
+	TIMESTAMP: YYYY-MM-DD HH:MM:SS
+
+Creating the table takes the following format:
+	CREATE TABLE <table of table> (
+		<variable name> <variable type> PRIMARY KEY,
+		<variable name> <variable type>,
+	);
+
+For example: 
+	CREATE TABLE student (
+		student_id INT PRIMARY KEY,
+		name VARCHAR(20),
+		major VARCHAR(20) 
+	)
+We can also define the primary key at the bottom of the command like this:
+	PRIMARY KEY (student_id)
+Constraints
+-----------
+	NOT NULL
+	UNIQUE
+	DEFAULT
+	AUTO_INCREMENT
+
+Commands:
+---------
+SHOW DATABASES [displays all the databases]
+USE <database name> [select a particular database]
+CREATE DATABASE <name>; [creates a database with the name]
+SHOW TABLES [displays all the tables of selected database] 
+CREATE TABLE <name> (<variable name> <variable type>) ; [creates a table with the name and parenthesis]
+	>> Putting "NOT NULL" beside a field name would not allow the user to input a NULL value for that field
+	>> Putting "UNIQUE" beside a field name would require each of the field entry to be different from each other
+	>> Putting "DEFAULT <Value>" puts a default value if a data is not entered
+	>> Putting "AUTO_INCREMENT" beside the primary key would automatically increase the value of the key by one with each record
+DECRIBE <table name>; [displays the information about the table]
+DROP TABLE <table name>; [deletes a table]
+ALTER TABLE <table name> ADD <field name> <field type> [adds an extra field to the currently existing table]
+ALTER TABLE <table name> DROP <field name> [deletes a column from the table]
+INSERT INTO <table name> VALUES(<record1> <record2>); [inserts data in table, the sequence of the record has to be same as previously declaired]
+INSERT INTO <table>(<fields>) VALUES(<records>); [inserts the records as the the sequence of the fields specified in the command]
+SELECT * FROM <table> [display all the info from student table]
+UPDATE <table name> SET <field name> = "<new name>" WHERE major = "<old name>" [change the name of a field]
+UPDATE <tbale name> SET <field name> = "<parameter> WHERE <field> = <parameter> [updating a specific information of a particular record]
+UPDATE <table name> SET <field name> = "<parameter> WHERE <field> = <para> OR <field> <para> [updates a record based on the OR operator]
+DELETE FROM <table name> WHERE <field name> = <parameter> [deletes the rows that meet the conditions]
+
+Basic Queries
+-------------
+SELECT * FROM <table name> [selects all the columns from the table, the * indicates that we are requesting all the columns rather than a specific one]
+SELECT <column name> FROM <Table name> [selects a specific column from the table]
+SELECT <table name>.<column name> from <Table name> [selects a specific column from the table, the . (dot) just makes it easier to read for complex databases]
+SELECT * FROM <table name> ORDER BY <field name> [sorts the table based on the filed specified; for descending sort put DESC after the field name; ascending by default but can also put ASC; we can also put in multiple column names]
+SELECT * FROM <table> LIMIT <number> [limits the number of output]
+SELECT * FROM <table> WHERE <field> IN <field arguments> [displays records that have specific filed arguments]
+SELECT * FROM <table> ORDER BY <field> [display all the records sorted by a field]
+SELECT * FROM <table> ORDER BY <field> DESC [sort descending]
+SELECT * FROM <table> ORDER BY <field1>, <field2> [sort by two fields]
+SELECT * FROM <table> ORDER BY <field> LIMIT <number> [show the first number-th]
+SELECT <column name> AS <column alias> from <table> [show the column and change the title of the column to the alias]
+SELECT DISTINCT <field name> from <table> [display the unique values of the field]
+SELECT COUNT(<field>), <field> FROM <table> GROUP BY <field> [display grouped data]
+SELECT * FROM <table> WHERE <field> LIKE "<wildcard>" [display records that matches the wildcards pattern]
+SELECT <column1> FROM <table1> UNION SELECT <column2> FROM <table2> [combines the out of the first select with the second select; this can be done only when the size of the column is same and the data in it of same type]
+SELECT <column1>, <column2> FROM <table1> JOIN <table2> ON <column1>=<column2> [joins two tables based on a common column/field]
+
+
+Operators
+---------
+	-- 	comments
+	<	less than
+	>	greater than
+	<=	less than or equal to
+	=>	greater than or equal to
+	= 	equal to
+	<>	not equal to
+	AND	and operator
+	OR	or Operator
+
+SQL Functions
+-------------
+COUNT(field name) [counts the number of records]
+AVG(field name) [displays the average]
+SUM(field name) [displays the sum]
+
+Wildcards
+---------
+% : any number of character
+_ : one character
+
+On Delete
+---------
+If a record in one table is conected to other tables, then JUST deleting the record willl have unwanted consequences. To avoid this, we can do one of two things during the creating of the tables:
+	1. ON DELETE SET NULL: All the related records are set to NULL
+	2. ON DELETE CASCADE: All the related rows/records are also deleted
+In some cases, the record may be a primary key in some table, in those cases, we actually can't set the value to NULL.
+
+Trigger
+-------
+Block of SQL code that gets executed when certain operation is performed. To work with triggers
+
+	DELIMITER $$
+	CREATE
+		TRIGGER <name> BEFORE INSERT
+		ON <table>
+		FOR EACH ROW BEGIN
+			INSERT INTO <table2> VALUES('Added new employee');
+		END$$
+	DELIMITER;
+Here, first we are changing the delimiter. The default SQL delimiter is semi-colon (;). However, in this this case we have to use semi-colon after the line that starts with INSERT. So, we are changing the delimiter to $$ at the first line and we are closing the trigger by typing END$$. Then again changing the delimiter to semi-colon.
+
+We can use If...else if...else statements in the triggers. For example:
+	DELIMITER $$
+	CREATE
+		TRIGGER <name> BEFORE INSERT
+		ON <table>
+		FOR EACH ROW BEGIN
+			IF NEW.<field> = '<argument>' THEN
+			INSERT INTO <table> VALUES(<value>);
+			ELSE IF NEW.<field> = '<argument2>' THEN
+			INSERT INTO <table> VALUES(<value>);
+			ELSE
+			INSERT INTO <table> VALUE(<value>);
+			END IF;
+		END$$
+	DELIMITER ;
+
+We have been creating triggers for INSERT, but we can also create triggers for UPDATE and DELETE. We can also do AFTER instead of BEFORE.
+
+We can also delete a trigger like this:
+	DROP TRIGGER <trigger name>

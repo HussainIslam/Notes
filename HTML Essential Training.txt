@@ -1,0 +1,24 @@
+HTML Essential Training
+=======================
+James Williamson
+=======================
+Basics of HTML
+--------------
+It is the most important of HTML, CSS, and JavaScript because the structure of the website depends on it. Most of the tags start with a opening tag and end with an ending tag. These are also called element tags. These tags can also have attributes. Some attributes are specific to an element but some are global attributes. There are two types of attributes:
+	1. Informative: this gives a little more info
+	2. Functional: helps perform something
+
+
+Tags
+----
+	<p></p>
+		[paragraph tags]
+	<h1></h1>
+		[heading 1 tag]
+	<em></em>
+		[emphasis tag, italic]
+	<strong></strong>
+		[makes the font bold]
+	
+
+

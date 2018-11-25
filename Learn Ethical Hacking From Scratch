@@ -1,0 +1,40 @@
+Learn Ethical Hacking From Scratch
+==================================
+Zaid Sabih in udemy.com
+==================================
+Section 1: Network Hacking
+--------------------------
+This is important because everything is now connected to network. This will include:
+	1. Pre-connection attacks
+	2. Gaining Access
+	3. Post-connection attacks
+How Network works
+-----------------
+Network contain client that are connected to a network to share information and resources, like internet, printer. In most of the cases the clients are conneted to the router/access point, which has direct access to internet. The only way for the clients to access internet or resources is to go through the router/AP. In wifi network, client and router exchange information in the air. So, we will be able capture the packets from the air. 
+
+What is MAC Address/Physical Address
+------------------------------------
+MAC refers to Media Access Control which is a permanent, physical, and unique number assigned by the manufacturer. The device will always have the same MAC address. This is used within the network to forward data from the server/AP to the client. Each packet contains source and destination MAC. As this is used to identify devices in the network, changing it will make you anonymous in the network. By changing your MAC address to another device's MAC Address will let you impersonate that device. 
+
+Changing MAC Address
+--------------------
+Enter the following commands in the "terminator" or "terminal" to change your MAC Address:
+	1. To list all the network interfaces (any device that lets us connect to network):
+			Command: ifconfig
+		You may have multiple interfaces installed by there will one interface that is running. The best way to identify the interface that is running is to look for the IP address of the interface. Now, look for the MAC address in of the interface that you want to change, which will look something like this: 48:5D:60:2A:45:25.  
+	2. To change the MAC, we first need to disable the interface.
+			Command: ifconfig interface_name down
+		if the command runs without any error the interface is disabled now. 
+	3. Change the option that we want to change. For this example, we want to change the MAC; so, identify what is written on the left of the MAC address of the interface that you want to change, for example: "ether".
+			Command: ifconfig interface_name hw ether target_MAC_Address
+	This command will change the MAC Address to the "target_MAC_Address".
+	4. Enable the interface again
+			Command: ifconfig interface_name up
+		if the command runs without error message then it has run successfully.
+	5. Check whether the MAC Address has been changed.
+			Command: ifconfig
+Managed vs Monitor Mode
+-----------------------
+
+
+

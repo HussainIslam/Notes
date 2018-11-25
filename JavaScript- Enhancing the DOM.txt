@@ -1,0 +1,150 @@
+JavaScript: Enhancing the DOM
+=============================
+Instructor: Ray Villalobos
+=============================
+What is Document Object Model (DOM)?
+------------------------------------
+DOM describes the structure of an HTML document and relationship between different tags and nodes. Browsers interpret and organize HTML as a DOM. DOM is like a family tree. At the top of the tree is the Document itself, then there is the root element, which is in most of the cases the html tag. Then there are the head and the body tag and more sub tags under those tags. Every tags in the document are called nodes. EVERYTHING IN THE DOCUMENT IS A NODE. Nodes can be both parents and children. They can also be siblings, nodes with same parent. First and last element of a node are called first and last child.
+
+Accessing Nodes
+---------------
+We can access the nodes of a document by first accessing the document node itself. If we write 'document' in the command line/JS this is going to return the complete document object. We can access the 'head' node or the 'body' node under the 'document' node by typing 'document.head' or 'document.body'. To get all the child nodes of body as an ARRAY we can write 'document.body.childNodes'. Similar to a normal arrray, we can access a specific index of the array by typing 'document.body.childNodes[index]'. To view this as a vertical list we can type 'dir(document.body.childNodes)'.
+
+Selecting DOM Elements
+----------------------
+1. getElementById()
+	It is the most common method to select element. This is supposed to get one single element. To use this the HTML element should have an 'ID'. The HTML might look like this: <body id:"element_id">...</body>
+	To get this element we can write:
+		document.getElementById("element_id")
+2. getElementsByTagName()
+	The second most popular method to select element. This group elements by tags. This returns an array of nodes/elements. This can also be combined with getElementById() method.
+		document.getElementByTagName('li')
+	This command will return all the elements by the same tag name. However, we might not want that many elements or we might want some specific elements. To narrow this down, we can use the getElementById() method first and run the getElementsByTagName() method on that, like this:
+		document.getElementById('element_id').getElementsByTagName('li')
+	This will return all the 'li' items that are within the element that has the id 'element_id'. As this returns an array, we can also run array methods on these.
+3. getElementsByClassName()
+	This method returns an array of elements with a specific class name. This is a relatively new selector; so, it may be incompatible with some of the older browsers. Refer to www.caniuse.com or www.quirksmode.org/dom/w3c_core.html. We can write this selector like:
+		document.getElementsByClassName('class_name')
+4. querySelector() and querySelectorAll()
+	These methods return either a single node or an array of nodes depending on which selector is used. These selectors use CSS selectors to get the nodes. So, we can use the way we use the selectors. This is similar to jQuery and may not be supported by older browsers.
+		document.querySelector('article')		this will return the first element this selector
+		document.querySelectorAll('article')	this will return an array of all elements
+5. Selecting named form elements
+	Forms elements ususally have name attributes; so, we can select them from their names. Additionally, DOM provides an object called 'document.forms'. So, to select a form on the webpage, we can write either 'document.forms' (this will return the form object as an array and we have to use the index '0' on this to access the main object) or 'document.form_name' (this will return the form object itself). Most of the items in the form usually have a name. So, we can also access specific items like this 'document.form_name.field_name' or change the value of the field like 'document.form_name.field_name.value = 123'. However, if two elements have ths same name, it will return an array.
+6. getElementsByName()
+	This method returns an array of elements that have the specified name. 
+		document.getElementsByName('subscribe')
+
+Understanding Node Properties
+-----------------------------
+	node.nodeType
+		[numerical value of a node, refer to www.w3schools.com/dom/dom_nodetype.asp]
+	node.nodeName
+		[name of the node]
+	node.attributes
+		[array of node attributes]
+	node.nodeValue
+		[element inside a node]
+Moving up and down
+------------------
+	parentNode
+		[goes up a level]
+	childNodes
+		[array of children]
+	firstChild
+		[first element of parent]
+	lastChild
+		[last elemtn of parent]
+	previousSibling
+		[the previous element with the same parent]
+	nextSibling
+		[the next element with the same parent]
+	firstElementChild
+		[first child that is an element]
+	lastElementChild
+		[last child that is an element]
+	children
+		[only childredn that are elements]
+	previousElementSibling
+		[previsous sibling that is an element]
+	nextElementSibling
+		[next sibling that is an element]
+
+Changing HTML Attribute
+-----------------------
+We can access, edit, and add attributes to HTML elements. We can do these by the dot notation. We can modify an attribute like:
+	node.attribute_name = "value"
+If 'attribute_name' attribute already exits, it will modify the value of the attribute. If the attribute doesn't exist, it will create the attribute and set the value of the attribute to 'value'. There are some exceptions to this. This rule can't be applied to JS reserved words, like 'class'. For class, we can use:
+	node.className = 'class_name'
+If the attribute is 'for', then we can write:
+	node.htmlFor = 'value'
+There is another way of working with attributes, to use attribute methods.
+	node.getAttribute(attributeName)
+		[gets value of the attribute]
+	node.setAttribute(attributeName, value)
+		[sets value of the attribute]
+	node.hasAttribute(attributeName)
+		[returns boolean of whether the node has the attribute]
+	node.removeAttribute(attributeName)
+		[deletes attribute]
+Controlling Classes with classList
+----------------------------------
+Class properties can have more than one value. Dot notation is not convenient for that. You can add, remove, or toggle this. However, internet explorer has a very lousy support for this one.
+	node.classList.add('class')
+		[adds a class to the node]
+	node.classList.remove('class')
+		[deletes a class from the node]
+	node.classList.toggle('class')
+		[turns class on/off]
+	node.classList.length
+		[return the number of classes in node]
+	node.classList.contains('class')
+		[returns boolean whether contains specific class]
+Targetting attribute properties
+-------------------------------
+Another way of accessing the attributes inside a node is 'attributes' property. However, we can only read these attributes because they are read only. For example:
+	node.attributes
+		[this returns a node list]
+An specific attribute can be accessed in a few ways:
+	1. As this method returns an array of nodes, we can use the index number to access a specific attribute:
+		node.attributes[0]
+			[this will return the first attribute]
+	2. We can access a specifit attribute by typing in the name of the attribute:
+		node.attributes['src']
+			[this will return the src attribute]
+Text Content Modifier
+---------------------
+There are three methods that lets us work with the modifying the text content of a node.
+	1. node.innerHTML
+		[changes text as HTML]
+	2. node.outerHTML
+		[includes element's tags]
+	3. node.insertAdjacentHTML(insertPoint, htmlText)
+		[insert addition within specified node]
+	4. node.innerText or node.textContent
+		[returns just the text of a node]
+		the 'innerText' is supported by all the browsers except for firefox, which supports the 'textContent'. However, the 'textContent' is not supported by internet explorer. This is why we might need to use a 'if' condition like this:
+			if(node.innerText){
+				myText = node.innerText;
+			} else {
+				myText = node.innerContent;
+			}
+Creating and appending nodes
+----------------------------
+This is a multiple step process. 
+	1. In this step, we may create a text element like following:
+		document.createTextNode('text inside') 
+	2. In the this step, we have create a new element with the following code:
+		document.createElement(elementName)
+	3. Then we need to append the text node to the element node and append the element node inside another node with the following code:
+		node.appendChild(elementName)
+In this way, we should already have our node/element created; so that we didn't have create again. However, that may not always be the case. In such cases we can use 'insertBefore()' method like this:
+	newNode.insertBefore(pNode, newNode.childNodes[5])
+Cloning, removing, and replacing nodes
+--------------------------------------
+	cloneNode(true/false)
+		[makes a copy of node; we then need to reposition the new node within the DOM; we also need to pass a true or false value along with it. If we want to copy the node and all its child nodes: true; if we want to clone only the node and NOT its child nodes: false]
+	removeChild(node)
+		[removes the node; this has to be called from a parent node]
+	replaceChild(destination, source)
+		[this replaces a node; we must call this from the parent node]
