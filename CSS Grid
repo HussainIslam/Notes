@@ -1,0 +1,241 @@
+CSS Grid Course
+===============
+freeCodeCamp.org on youtube.com
+https://www.youtube.com/watch?v=t6CBKf8K_Ac
+===========================================
+What is CSS Grid?
+-----------------
+Grid Layout gives us a method of creating grid structures that are described in CSS and not in HTML. It helps us to create layouts that can be redefined using Media Queries and adapt to different contexts. Grid Layout lets us properly separate the order of elements in the source from their visual presentation.
+
+Basic Steps
+-----------
+To appy Grid to a portion of markup, we need put the markups that we want to style in a container. Like following:
+	<div class="container">
+		<div>1</div>
+		<div>2</div>
+		<div>3</div>
+		<div>4</div>
+	</div>
+Then in the CSS file linked to the HTML file, we need to change the display of the container to "grid".
+	.container {
+		display: grid;
+	}
+Now, by default, it will create one column for all the markups or elements. To change the number of columns and rows we need to implement the 'grid-template-columns' and 'grid-template-rows' attributes in the CSS file
+
+Fraction Units and Repeat
+-------------------------
+To make the website reponsive, we can use 'fraction' units, which comes with Grid.
+	grid-template-columns: 1fr 1fr 1fr;
+This equally distributes the total size of the container to 3 columns equally. There is a another technique to implement this in CSS. 
+	grid-template-columns: repeat(3, 1fr);
+Here, in 'repeat(3,1fr)', the '3' represents the number of times the property will be repeated, which is the number of rows or columns. The second parameter defines the width or height of the column or row.
+
+If we want to define both the rows and columns throught Grid with the repeat method, then there is a short-hand notation to implement this:
+	grid-template: repeat(2,50px) / repeat(3, 1fr);
+The first portion is the row and the second portion defines the columns.
+
+Positioning Items
+-----------------
+We can also position and modify the height and width of elements through Grid. To do this first we need to define the container as 'grid' and also define the number of rows and columns in the grid. Then in the specific item selector we need to define the seperator number where the item starts and where the item ends. In a particular container if we have 2 columns, this means that we have 3 column seperator. The first one at the begining of the container, the second one at the middle and the last one after the second column. For example:
+	.header{
+		grid-column-start: 1;
+		grid-column-end: 3;
+	}
+We can also write the short-hand form of this, like following:
+	.header{
+		grid-column: 1 / 3;
+	}
+Here the '1' defines the starting column line and the '3' defines the ending column line. There is another way of doing the same thing:
+	.header{
+		grid-column: 1 / span 2;
+	}
+Here 'span 2' means that the element starts at the first column line and span over 2 columns. There is a fourth way of doing the same thing:
+	.header{
+		grid-column: 1 / -1;
+	}
+The '-1' indicates the very last column line, which means that the element will start at the first column line and extend up the very last column line.
+
+Similar properties are available for the row:
+	.content {
+		grid-row: 1 / -1;
+	}
+We can also assign 'auto' parameter to the starting point, which will adjust the starting point of the elements automatically to fill up empty spaces before that. For example:
+	.content {
+		grid-column: auto / span 2;
+	}
+
+Template Areas
+--------------
+This is a cool feature to change the layout pretty fast. To use this property we need to give the container a 'grid-template-areas' property. This works in a different way from what we have learned so far. To implement this we need to define a "string" that is seperated by space and each of the part of the string NAMES a column in the row. So, if we have 12 columns in the layout we need to define 12 strings that represent the names of the columns. This will basically work as a visual representation of the layout, like this:
+
+	.container {
+		height: 100%;
+		display: grid;
+		grid-gap: 3px;
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: 40px auto 40px;
+		grid-template-areas:
+			"h h h h h h h h h h h h"
+			"m c c c c c c c c c c c"
+			"f f f f f f f f f f f f"
+	}
+In the preceding code, if you look closely, you may find this is actually a VISUAL REPRESENTATION of the layout that we want. The 'h' represents the 'header', 'm' represents 'menu', 'c' represents 'content', and the 'f' represents the 'footer'.
+
+Then in the respective item, we give each item a property called 'grid-area' and the respective items should take up respective space as defined by the 'grid-template-areas'. For example:
+	.header{
+		grid-area: h;
+	}
+
+	.menu{
+		grid-area:m;
+	}
+The reason this method is brilliant is becuse we can just change the letters in the 'grid-template-areas' and that will automatically adjust the layout, even without touching respecting properties.
+
+Important to know: This works only if the layout is RECTANGLE.
+
+Auto-fit and minmax
+-------------------
+If we want a responsive website that adjusts the number of columns when the screen size changes. To make this work, we can use the 'auto-fit' argument with the repeat method, like this:
+	grid-template-columns: repeat(auto-fit, 100px);
+
+In this case, if we change the screen size, then the code will automatically adjust the number of columns and try to fill up the empty space on the right with as many columns as it can. However, this may sometimes cause blank spaces in the webpage. This is because if the empty space is less than '100px', in this case the width of each of the column is 100px, then it will be left empty and we don't want it to be left empty. To avoid this situation, we can include another argument in the method, called 'minmax'. We can use this like following:
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
+This means that the width of the columns will be minimum '100px' and maximum '1fr'. If the webpage has some spare space it will fill up the space by stretching the items.
+
+Implicit Rows
+-------------
+When the screen size is adjusted and the width of the website is reduced, Grid may create additional rows to accomodate the rows that it can't fit in the actual layout. For example, if we have defined 2 rows but because of the column property Grid had to create additional rows to fit in the rows, these rows are called 'Implicit rows'. These rows are not styles properly. To style them properly as we want, we can include the propety 'grid-auto-rows'. This property will apply to all the rows, including the implicit rows and the ones that we created explicitly. For example:
+	grid-auto-rows: 100px;
+
+Auto Start and Auto Flow
+------------------------
+Defining the starting point of any items as 'auto' will automatically position that item into the Grid where it fits best and reduce any space before that.
+
+	.content {
+		grid-column: auto / span 2;
+	}
+However, this may leave some other space before this because the Grid is trying to fit it the element in the best place it can, maintaing the sequence of items. To avoid this problem, we can use another property called 'grid-auto-flow'. This is by default set to 'row'; that is why it will layout the contents one row at a time. However, if we want to fill up the gaps, we need to set this property to 'dense', which will fill up empty spaces (if it finds any) in the Grid. This is a revolutionary concept for CSS because this can rearrange order of the markup, which is called 'Source order independence'.
+
+Named Lines
+-----------
+This is a new of defining position and size of items. In this method, we define names to the column lines that we have between the columns. For example:
+	.container{
+		grid-template-columns: [main-start] 1fr [content-start] 4fr [content-end main-end]
+	}
+	.content{
+		grid-column: content-start / content-end;
+	}
+The first portion of the code ".container" contains the portion of code where we define the names of the lines and in the second portion we use those names. As we can see in the '.container' we can define multiple names for a single line by a space.
+
+This actually includes another cool trick. In the definition of the names, we used names like 'content-start' and 'content-end'; so, Grid actually knows that we are defining areas for the content element. So, when implementing the spacing the element section, we can just call the 'content' without the 'start' or 'end'. Like this:
+	.content{
+		grid-column: content;
+	}
+We can also apply this trick on 'grid-rows' and 'grid-area'.
+
+Important to know: To use the 'grid-area' the area needs to be surrounded by the names;
+
+Justify-content and Align-content
+---------------------------------
+We can justify and align our contents over the total space of the screen or window using these two methods. 'Justify-content' justifies and distributes all the contents along the horizontal axis. For example: 
+	.container{
+		justify-content: start;
+	}
+
+Its default value is 'start'. This justfies all the contents to the left hand side of the screen. Other properties that we can use on this are: 
+	'start': to justify all the contents to the left of the screen
+	'end': to justify all the contents to the right hand side of the screen, 
+	'center': to justify all the contents to the center of the screen,
+	'space-between': to distribute the items so that there is space between them
+	'space-evenly': to distribute space evenly around items
+	'space-around': to distribute double space between items and half space around them 
+
+If we want to align our items in the vertical axis, we can use the 'align-content'. This method also has all the same properties that work on the vertical axis.
+
+Justify-items and align-items
+-----------------------------
+We can also justify and align individual items in our website. We can use 'justify-items' to define the sizing of the items horizontally. To define the sizing of the items vertically, we can use 'align-items'. Both these methods are applied to the container.
+	
+	'start': squeeze all the items at the start of its position
+	'stretch': 	streches the item to its full space
+	'center': squeezes the items to the center space as much as possible
+	'end': squeezes all the items to its end of position
+
+If you want to apply similar sizing method to individual item, we can use 'justify-self' for horizontal sizing of individual item and 'align-self' for vertical sizing of individual item.
+
+Auto-fit vs auto-fill
+---------------------
+When stretching a website that has auto-fit and a website that has auto-fill like following:
+	.container {
+		border: 1px solid black;
+		display: grid;
+		grid-gap: 5px;
+		grid-template-columns: repeat(auto-fit, minmax(100px, 1fc));
+		grid-template-rows: 100px 100px;
+	}
+	.contaner2{
+		border: 1px solid black;
+		display: grid;
+		grid-gap: 5px;
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fc));
+		grid-template-rows: 100px 100px;	
+	}
+
+When we stretch the window, both the technique creates new columns on the right side; however, the auto-fit would stretch the items and make the width of the new item to zero, which will make the new columns invisible. However, auto-fill give those columns widths; so, those spaces will appear to be blank spaces.
+
+Flexbox vs. CSS Grid
+--------------------
+	Flexbox: made for 1-dimentional layout
+	Grid: made for 2-dimentional layout
+
+	Flexbox: Little more markup
+	Grid: lesser markup
+
+	Flexbox: Content first (takes basis in the content); layout determined by the content
+	Grid: Layout first (takes basis in the layout); the layout is explicitly developed
+
+However, the most important this is that we can combine both to boost up the power of layout!!!
+
+Syntax:
+-------
+	display: grid
+		[enables CSS grid for a container]
+	grid-template-columns: 100px auto 100px;
+		[defines the width of columns]
+	grid-template-rows: 50px 50px;
+		[defines the height of rows];
+	grid-gap: <size_of_the_gap>;
+		[defines the gap among the rows and columns]
+	grid-template: repeat(2,50px) / repeat(3, 1fr);
+		[defines the row and column in the grid]
+	grid-column-start: <starting_column_line>;
+		[defines the start point of a item in column]
+	grid-column-end: <ending_column_line>;
+		[defines the end point of a item in column]
+	grid-column: <starting_column_line> / <ending_column_line>;
+		[short hand form of defining start and end point of column]
+	grid-row: <starting_row_line> / <ending_row_line>
+		[short hand form of defining start and end point of row]
+	grid-template-area: "<visual representation of the grid>"
+		[defines how the layout will looklike]
+	grid-auto-rows: "size"
+		[defines the height of rows including implicti rows]
+	grid-auto-flow: "dense";
+		[fills gaps in the grids by moving items]
+	justify-content: "type";
+		[arranges the items horizontally]
+	align-content: "type";
+		[arranges the items vertically]
+	justify-items: "type";
+		[defines the sizing of elements horizontally]
+	align-items: "type";
+		[defines the sizing of the elements vertically]
+	justify-self: "type";
+		[sizes a particular item horizontally]
+	align-self: "type";
+		[sizes a particular item vetically]
+
+
+
+
