@@ -33,9 +33,13 @@ We can use both the dot notation or the bracket notation to access the data, jus
 	console.log(info["full_name"]);
 The second option can be used if the key names don't have valid JS names, like: Full Name.
 Objects can also contain arrays, which is accessed using the index number. 
-Using JS and JSON Tools
------------------------
-
+Access Elements
+---------------
+To access a JSON object in JS, we type:
+	info.full_name
+If the object has an array:
+	info.links[1].facebook;
+All the methods available to JS objects are available to 
 
 
 

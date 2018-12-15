@@ -1,0 +1,70 @@
+HTML Review
+===========
+<!doctype html>
+	this is the 'shebang' that defines the type of document we are going to write and what standard it is going to use
+<!--Comment-->
+	Commenting style for html
+<head></head>	
+	this tag specifies the starting of the 'head' of the page
+<title></title>
+	this tag defines what is considered to be the title of the webpage
+<body></body>
+	defines the body of the document. Most of the contents come within this tag
+<p></p>
+	this paragraph tag, text put inside this tag are considered as plain text
+<input type="button" value="Anonymous">
+	one of three types of button, the type specifies this to be an anonymous button
+<input type="submit" value="Submit">
+	this is a submit button, that submits form information to server
+<input type="reset" value="Reset">
+	this is a reset button, which resets all the form fields
+<table></table>
+	defines the start and end of a table
+<tr></tr>
+	defines the a row of the table
+<th></th>
+	defines the heading of a table
+<td colspan="2" rowspan="2"></td>
+	defines the table data in a table, colspan and rowspan identifies the size
+<ul></ul>
+	defines unordered list marked by bullet points
+<ol></ol>
+	defines ordered list, marked by numbers
+<li></li>
+	defines list items for both ul and ol
+<h1></h1>
+	the first one of 6 to define a heading, others are: h2, h3, h4, h5, and h6
+<img src="image.jpg">
+	self-closing tag to include an image to the webpage; types of image supported: jpeg, gif, and png
+<a href="another.html"></a>
+	this is called the anchor tag. This is used to create links to another webpage
+<form action="#" method="#"></form>
+	defines the start and end of an html form; method and action are MUST
+<label></label>
+	defines the label of an input field
+<input type="text" name="name">
+	defines a text input field
+<input type="radio" name="gender" value="male">
+	defines a radio input field; the name and value are MUST; name is used to group multiple radio buttons
+<input type="checkbox" name="hobby" value="Gardening">
+	defines a checkbox; name and value are MUST;
+<select name="city"></select>
+	defines the start and end of a dropdown menu
+<option value="Toronto">Toronto</option>
+	defines an item in the dropdown menu
+<header></header>
+	new semantic tag for header of a webpage
+<main></main>
+	new semantic tag for the main content of a webpage
+<footer></footer>
+	new semantic tag to put in the footer of a website
+<nav></nav>
+	new semantic tag to put the navigation panel
+<aside></aside>
+	new semantic tag to put the sidebar
+<br>
+	adda break 
+<div></div>
+	general purpose block element
+<span></span>
+	general purpose inline element

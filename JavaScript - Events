@@ -1,0 +1,84 @@
+JavaScript: Events
+==================
+Ray Villalobos
+==================
+Understanding Events
+--------------------
+JS runs scripts sequentially. However, we can tag some codes to some events like click, page load, and so on. To do something when some event hapeen we have to capture that event, which is called Event Registration. We can do event registration in the following ways:
+	1. Include 'onClick' HTML attribute to html file
+	2. Include 'onClick' JS method
+	3. Include 'addEventListener' JS method (more recent and allows event propagation and non-DOM events)
+Event Object
+------------
+When we register an event, we receive an object from the browser itself. The object might look different on different versions of browser. The data we receive will also depend on the type of event we requested. There is a lot of information returned. Event info:
+	type					type of the event
+	defaultPrevented		whether default action is prevented
+	timestamp				when happened
+	currentTarget			element the event was assigned to
+	target 					element the event originated from
+	srcElement				element that fired the event
+	fromElement				deal with mouse over and out of it
+	toElement				deal with mouse over and out of it
+	screenX,Y				position relative to screen
+	layerX,Y				position relative to other positioned event
+	clientX,Y				position relation to window
+	pageX,Y					position relative to html doc
+	offsetX,Y				position relative to event element
+	charCode				character code of the button pressed
+	altKey					was the alt key pressed 
+	ctrlKey					was the ctrl key pressed
+	shiftKey				was the shift key pressed
+	button					
+Event Propagation
+-----------------
+This means that even if we tag an event in the parent node, it will be true for the child nodes as well. This is when a single element can capture all the child events. This is why use the 'addEventListener' method. However, browsers can disagree on the order of the events. Different browsers follow different propagation model. The browsers can catch an event in one of two ways:
+	1. Event Capture: When the click happens, it can move down the DOM register the element where the event happened; it will go from the parent node to the child nodes and eventually the exact node where the event took place.
+	2. Catching Event in the bubbling phase: The other method to register an event is to notice the specific node first and move up through the parent nodes. This is so named because the event bubbles from the specific node to the parent nodes. IE does only bubbling.
+
+Sometimes you may not want event propagation to happen. We can stop that using the 'stopPropagation()' method. In the older browser we can use the 'cancelbubble' method.
+
+Default Behavior
+----------------
+A lot of events have a default behavior. For example: the default behavior of clicking some link is to go the following webpage. Sometimes we might want to stop those defuault behavior from happening. To stop the default behavior, we can use the method 'preventDefault()'. 
+
+Removing DOM elements with Events
+---------------------------------
+To remove a DOM element when it is clicked will need to capture the event and ask for the event's target. Then we need to move to its parent node and then remove the child node. If the node that has been clicked is wrapped by another element we need to go to that node as well. This actually depends on which node we want to remove. For example:
+	document.querySelector('.grid').addEventListener('click', function(e){
+		var removeTarget = e.target.parentNode;
+		removeTarget. parentNode.removeChild(removeTarget);
+	}, false);
+
+Creating DOM Elements
+---------------------
+To create DOM Elements we have to follow a three step process. They are:
+	1. Create an element using the createElement() method
+	2. Add any attribute to that element
+		element.attribute = 'value'
+	3. Add/append that element to another DOM element
+		e.target.parentNode.appendChild(element)
+Sometimes after creating an element, we might need to clean up the actions or code. To do so, we might want to remove the element or remove the event. This is because sometimes the events stay in the event que and gernate errors for us. We already have looked at how to remove the element. Now, we are going to see how to remove the event. 
+
+Remove an Event
+---------------
+To remove an event, we have to follow the steps:
+	1. Give the function a name that is run when the original event is created; we would need that name when we want to remove that event.
+	2. We need to use the removeEventListener() method on the object/event (e.target or this)
+The complete code might look like following:
+	e.target.removeEventListener('click', function_name, false);
+
+Preventing Default Events
+-------------------------
+Like we said before, sometimes we might want to prevent the default behavior on an event, like right click on something has a default action of generating a context menu, clicking on a link has a default action of going to the webpage, or someone might want to have a custom context menu when they click right button. However, to do so, first we need to prevent the default behavior like this:
+	e.preventDefault();
+
+
+
+
+Resources:
+----------
+www.quirksmode.org
+www.unixpapa.com/js/key.html
+www.quirksmode.org/js/events_order.html
+column selection: www.sublimetext.com/docs/2/column_selection.html
+Media Events: www.w3schools.com/tags/ref_av_dom.asp

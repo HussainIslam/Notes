@@ -1,0 +1,69 @@
+Node.js Essential Training
+==========================
+Alex Banks on lynda.com
+==========================
+What is Node.js
+---------------
+Nodejs is not a programming language or framework. It is a runtime environment for Javasript files. Node.js allows us to create javascript applications that run outside the scope of the browser. That is, the JS files were historically run within a browser using a JavaScript Engine. For example, SpiderMonkey and Rhino for Firefox, V8 for Chrome, Nitro for Safari. However, in 2009, Ryan Dahl created a copy of the V8 engine as Node.exe which could run the .js files outside without the need of a browser. In 2011, Node Package Manager (NPM) was created, which allowed sharing of open source libraries.
+
+How nodejs works
+----------------
+Nodejs works in asynchronously, non-blocking, event driven i/o. This means that every request that we do to the server is processed through a single thread.
+
+Nodejs command prompt
+---------------------
+node -v
+	[displays the version of nodejs]
+node <fileName>
+	[runs a nodejs file] 
+
+Global Objects
+--------------
+Every file that we create in nodejs is considered as a module. Any global variable that we create are added to the module, not the global namespace. So, we cant to access a global variable that we created like this: console.log(global.variableName); however, we can still access the variable like this: console.log(variableName). 
+
+Additionally, anything that is available in Javascript is available to the environment in nodejs. As nodejs 4 and above supports ES6, we can also use template strings like this: console.log(`My name is ${myName}`);
+
+We can import other nodejs modules using "require" keyword, like this: var path = require("path"). This imports the path module that comes with the nodejs. To console.log the file name from the path, we can write: 
+	var path = require("path");
+	console.log(path.basename(__filename)); 
+
+Reference to the current directory: console.log(__dirname);
+Reference to the current module: console.log(__filename);
+
+console object:
+	console.log("Hello, world!");
+console object is part of the global namespace, which is default; so, we can also write: 
+	global.console.log("Hello, World!");
+
+Process Object
+--------------
+One important object that is available to us globally is the process object. It can be accessed from anywhere, and it contains functionality that allows us to interact with information about the current process instance. We can use the process object to get environment information, read environment variables, communicate with the terminal, or parent processes, through standard input and standard output. We can even exit the current process. This object essentially gives us a way to work with the current process instance. All of this information will be saved in a variable called 'process.argv', which stands for the argument variables used to start the process.
+If we console.log(process.argv) through a file, we get an array which contains a path to nodejs and the .js file that is run. If we pass additional arguments to it, it will also display those. For example, if we pass the following arguments while running the file:
+'node app.js --user George --greeting "Good Day, Sir!"', we would get the following output:
+	[ 'C:\\Program Files\\nodejs\\node.exe',
+  'D:\\School of Learning\\Node.js\\Ex_Files_Nodejs_EssT\\Ex_Files_Nodejs_EssT\\Exercise Files\\Ch03\\03_02\\start\\app',  '--user',  'George',
+  '--greeting',
+  'Good day, Sir!' ] 
+So, the process.argv parameter actually stores all the arguments that are passed to the app. It always holds in the first position the absolute pathname of the executable that started a nodejs process and in the second position the actual javascript file that is being executed.
+
+Another feature of the process object is the standard input and standard output. This can used to communicate with the process and terminals. Using the process object, we can write to the standard output, which the console.log uses by default. We can write to the default output device like following:
+	process.stdout.write("Hello");
+To listen to the standard input, we add an event listener with 'data' event. The 'data' event means when the user types some data and hits enter, like this:
+	process.stdin.on('data', function(){
+		process.stdout.write('\n' +data.toString().trim() +'\n');
+	});
+To exit from the program, we can write:
+	process.exit();
+To listen to the exit prompt we can write: 
+	process.on('exit', function(){
+		//actions
+	});
+
+
+
+References:
+-----------
+Nodejs Documentation: https://nodejs.org/api/
+Javascript Essential Training - Simon Allerdice
+Up and Running with ECMAScript 6 - Eve Porcello
+Up and Running with Git and GitHub - Ray Vilalobos
