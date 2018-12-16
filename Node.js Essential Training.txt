@@ -19,11 +19,11 @@ node <fileName>
 
 Global Objects
 --------------
-Every file that we create in nodejs is considered as a module. Any global variable that we create are added to the module, not the global namespace. So, we cant to access a global variable that we created like this: console.log(global.variableName); however, we can still access the variable like this: console.log(variableName). 
+In regular javascript, the window/document is the global object. All the global variables and methods are attached to it. However, in Nodejs every file that we create is considered as a module. Any global variable that we create are added to the module, not the global namespace. So, we cant to access a global variable that we created like this: console.log(global.variableName); however, we can still access the variable like this: console.log(variableName). 
 
 Additionally, anything that is available in Javascript is available to the environment in nodejs. As nodejs 4 and above supports ES6, we can also use template strings like this: console.log(`My name is ${myName}`);
 
-We can import other nodejs modules using "require" keyword, like this: var path = require("path"). This imports the path module that comes with the nodejs. To console.log the file name from the path, we can write: 
+We can import other nodejs modules using "require" function, like this: var path = require("path"). This imports the path module that comes with the nodejs. To console.log the file name from the path, we can write: 
 	var path = require("path");
 	console.log(path.basename(__filename)); 
 
@@ -59,7 +59,168 @@ To listen to the exit prompt we can write:
 		//actions
 	});
 
+Global Timing Functions
+-----------------------
+There are some global timing functions with which we can control the timing. The first one is the setTimeout() method. This method takes two parameters. The first one being the function which it should run after the stipulated time is over, and the second parameter is how many miliseconds to wait before running the aforementioned function. So, it may look like this:
+	setTimeout(function(){
+		console.log("done");
+	}, 3000);
+Another timing method is setInterval() which runs a function after a fixed interval time. This method also takes two parameters. The first method is the function that it will run after each of the fixed interval and the second parameter is the amount of time in miliseconds its going to wait before running the program. This may look like:
+	setInterval(function(){
+		console.log("0.5 second passed");
+	}, 500);
+However, this setInterval function will run forever! We might want to stop this function from running after certain time. To do that we need to use the assignment method of function declaration for the setInterval function and then can combine another method, clearInterval(), along with the two that we have just learned. The clearInterval methods takes a setInterval function as its parameter. This will look something like this:
+	var timer = setInterval(function(){
+	  console.log("0.5 seconds passed");
+	}, 500)
 
+	setTimeout(function(){
+	  clearInterval(timer);
+	  console.log("Done");
+	},5000);
+
+Core Node Modules
+-----------------
+There are several code modules that come with nodejs. For example, we used the 'path' module to extract the path of the current folder and file. We can also use path.join() method to create a path like this: 
+	path.join(__dirname, "www");
+This will create a path that has the current directory name, followed by a subdirectory name "www".
+
+Another core module is the 'util' module. There is a util.log() method in this. This is similar to the console.log() global module. However, the 'util.log()' method also inserts the timestamp to the console.
+
+Another core module is 'v8' module. This can be used to get information regarding memory. A very important method is the v8.getHeapStatistics() method, which returns total memory size, total physical size, total available, used memory, and heap size limit.
+
+The 'readline' module allows us to ask questions to our terminal user. This is built around the standard input and output objects that control prompting user with questions and saving those answers. After importing the module (var readline = require('readline'), we need to instantiate the class to an object and run the object:
+	//here rl is the instance of class readline that has a method createInterface, which takes two parameters, one for the input and the other one for the standard output
+	var rl = readline.createInterface(process.stdin, process.stdout);
+	//this is to create a smooth process of asking questions and getting an answer for that. To achieve this we need to invoke the question() method of rl object and pass to parameters to it. The first parameter is the question that we want to ask and the second one is the callback function that will be invoke once we have an answer.
+	rl.question("What is your name", function(answer){
+		console.log(answer);
+	});
+We can also set up a prompt to ask a question over and over. We can do this by using the method rl.setPrompt('question?');
+Then we can invoke the prompt method like this: rl.prompt(). Then to listen to any answer we need to listen to a 'line' that is when the user enter a line some callback function will be invoked like this:
+	rl.on('line', function(answer){
+		console.log(answer.trim());
+	});
+To exit out of a readline instance we can use rl.close() method.
+We can also use another event listener that will invoke a callback function before closing the rl object. We listen to the 'close' event like this:
+	rl.on('close', function(){
+		console.log (realPerson.name);
+	});
+
+Event Emitter
+-------------
+This is a module to listen to different events. In fact, we have have been using an instance of the eventEmitter with .on() method. The eventEmitter is a part of the 'event' module. We import that event like this:
+	var events = require('events');
+The event emitter is a constructor; so, we need to create an instance of the object like this:
+	var emitter = new events.EventEmitter();
+We can also create an object directly from the constructor by invoking the constructor from the 'require' method, like this:
+	var EventEmitter = require('events').EventEmitter;
+
+An important feature of this object is that we can create our own customeEvent and invoke a callback function if that event occurs. Like this:
+	emitter.on('customEvent', function(message, status){
+		console.log("Status: " +status);
+		console.log("Message: " +message);
+	});
+However, as this is a 'customEvent', we also need to trigger/emit this event; otherwise, the previous callback function will never be invoked. So, emit the event we use 'emit()' method like this:
+	emitter.emit('customEvent', "Hello World", 200);
+We can increase the power of eventEmitter by combining the event object with other objects. To do this we can allow other objects inherit the EventEmitter. To inherit a class to another class, we 'require' the 'util' module (var util = require('util')). Then we inherit the properties of one object to other object by invoking the 'inherits()' method from the 'util' module, like this:
+	util.inherits(Person, EventEmitter);
+This means that we have made an object called 'Person', which inherits all the properties of 'EventEmitter' object. Then we can make the object listen to a custom event and also trigger an custom event from the other object. A detailed example of this process is: 
+	//imports the EventEmitter constructor from 'events' module
+	var EventEmitter = require('events').EventEmitter;
+	//imports the util module
+	var util = require('util');
+	//defines a Person object constructor
+	var Person = function(name){
+	  this.name = name;
+	};
+	//Person inherits the EventEmitter object
+	util.inherits(Person, EventEmitter);
+	//create a new instance of Perons called ben
+	var ben = new Person ("Ben Franklin");
+	//invokes a callback function triggered by custom
+	//event called 'speak'
+	ben.on('speak', function(said){
+	  console.log(`${this.name} said ${said}`);
+	});
+	//emits the 'speak' event
+	ben.emit('speak', "Whatever you is correct");
+
+Exporting Custom Modules
+------------------------
+We can create our own custom modules that can be used again to stop repeating the same code. The modules also have .js extensions. By definitions all the properties and methods of a module are private; so, we can't use them in other modules. If we want to reuse them, we need to export it from the module that we want to use. To do this we need to use the module.exports property, which contains the object returned by the 'require' method. So, whatever we put in to this module.export property will be returned when require this module. For example: if we create a Person.js module that constains a object constructor function called 'Person' and then write the following line:
+	module.exports = Person;
+This puts the Person constructor in the module.exports property. So, whenever we 'require' this Person module, we will be returned this Person constructor. When reusing this module, we need to specify the path to the module in relative format and the name of the module is by default assumed to be .js format. So we can write:
+	var Person = require(./lib/Person);
+
+Child process Module
+--------------------
+Node.js comes with a Child Process module which allows you to execute external processes in your environment. In other words, your Node.js app can run and communicate with other applications on the computer that it is hosting. To do so, we 'require' the 'child_process' module:
+	var exec = require('child_process');
+Then to execute a command, we can invoke the 'exec' method from the module. This has two parameters; the first one is the command itself as a string and the second one is a callback function which gets any error of the command and the output of the first paramenter as arguments. Like this:
+	exec("dir", function(err, stdout){
+		if(err){
+			throw err;
+		}
+		console.log("Listing Finished");
+		console.log(stdout);
+	});
+
+Another useful method is the 'spawn' method, which is useful for processes that take some time to process and finish or is ongoing.
+
+File System Module
+------------------
+We can work with the filesystem through nodejs. Just to note that all the methods in the filesystem module have a synchronous version and an asynchronous version. The module that we would 'require' for these operations is 'fs', like this:
+	var fs = require('fs');
+Once we have imported the module, we can read the list everything in a directory using the following synchronous method:
+	var files = fs.readdirSync('./lib');
+However, this will block the process, as this is synchronous method, from processing anything else until it is done. So, we can use asynchronous method. However, asynchronous functions work differently. It will not return the output like the synchronous method; so, we can't assign that to a variable any longer. Rather, it will run a command and keep listening to whether that finish. When that task finishes it will run a callback function. So, the structure of this method is like this:
+	fs.readdir('./lib', function(err, files){
+		if(err){
+			throw err;
+		}
+		console.log(files);
+	});
+
+We can also read the contents of text and binary files. If we are reading from a text file, we need to send the module the encoding system (like utf-8), otherwise it will automatically read the file as binary file. To read a file synchronously, we can use the 'readFileSync' method like this:
+	var contents = fs.readFileSync("./lib/sayings.md", "UTF-8");
+To read the files asynchronously, like this:
+	fs.readFile("./lib/sayings.md","UTF-8", function(err, content){
+		if(err){
+			throw err;
+		}
+		console.log(content);
+	});
+We can combine the readdir and readfile methods. However, to use these two together, we would need the 'path' module, like this:
+	var fs = require('fs');
+	var path = require('path');
+	fs.readdir('./lib', function(err, files){
+	  files.forEach(function(fileName){
+	    var file = path.join(__dirname, "lib", fileName);
+	    var stats = fs.statSync(file);
+	    if(stats.isFile() && fileName !== ".DS_Store"){
+	      fs.readFile(file,"UTF-8", function(err, contents){
+	        console.log(contents);
+	      });
+	    }
+	  });
+	});
+We can also create and wrie to files using this module. The asynchronous method used to achieve that is the 'writeFile' method. This method takes three arguments; the first one is the name of the file, the second one is the content that we want to write, and the third argument is the callback function that will run once this process is done. The syntax may look like:
+	fs.writeFile('sample.md', md.trim(), function(err){
+	  console.log("File Created");
+	});
+We can also append some text to a file. The method used for this is 'appendFile', which takes three parameters; the first one is the name of the file, the second one is the content, and the third is the callback function. In the synchronous method, only name of file and text to append is provided as arguments. For example:
+	fs.appendFileSync(realPerson.name +".md", `* ${saying.trim()}\n`);
+We can also work with directories in 'fs' module. The method to create directories is 'mkdir'. For asynchronous 'mkdir' method we need to pass two parameters; the first one is the name of the directory, and the second one is the callback function, which sould inturn have an errro parameter. 
+	fs.mkdir("lib", function(err){
+	    if(err){
+	      console.log(err);
+	    } else{
+	      console.log("Directory Created");
+	    }
+  	});
+We can also check whether a directory exits. We use the exitsSync method, which returns a boolean value. We can write this like:
+	fs.exitsSync("lib");
 
 References:
 -----------
