@@ -220,11 +220,363 @@ We can also work with directories in 'fs' module. The method to create directori
 	    }
   	});
 We can also check whether a directory exits. We use the exitsSync method, which returns a boolean value. We can write this like:
-	fs.exitsSync("lib");
+	fs.existsSync("lib");
+
+We can rename and move files and folder. We use he rename() method for this purpose like this:
+	fs.rename("./lib/notes.md","./notes.md", function(err){
+		if(err){
+			console.log(err);
+		} else{
+			console.log("File moved");
+		}
+	});
+
+We can also delete files using unlink() method like this:
+	fs.unlink("./lib/notes.md", function(err){
+		err ? console.log(err) : console.log("File Deleted"); 
+	});
+To remove non-remove directories, we use the "rmdir()" method like this:
+	fs.rmdir("./lib/assests", function(err){
+		if(err){
+			throw err;
+		}
+		console.log("Directory Removed");
+	});
+
+We can implement readable file streams that can read files in small chunks. This technique is very useful for reading large files. To use this, first we need to create a read stream like:
+	var stream = fs.createReadStream("./chat.log","UTF-8");
+Then we can start listening to an 'data' event and invoke a callback function, which receives a chunk read from the file. For example:
+	stream.on('data', function(chunk){
+		process.stdout.write("Size of the chunk: +chunk.length\n");
+	});
+We can also implement a instance of write stream to write small chunks of data in a file. 
+	var stream = fs.createWriteStream("./chat.log");
+To actually write data to the file we can use 'write()' method like this:
+	stream.write("What would you say");
+To close a write stream we use the following method:
+	stream.close();
+
+HTTP and HTTPS Module
+---------------------
+The HTTP module will be used for creating web servers, for making requests, for handling responses. There are two modules for this. Nodejs supports both http and https module. To import the https or http module, we need to require the respective module:
+	var https = require('https');
+We can work with a https request with request() method. The request method takes two parameters, in general. The first parameter contains the options of the request in javascript object and the second parameter is a callback function. First we need to create the options object, which may look like this:
+	var options = {
+	  hostname: "en.wikipedia.org",
+	  port: 443,
+	  path: "/wiki/George_Washington",
+	  method: "GET",
+	};
+Then we invoke the request() method. The data will be downloaded in chunks. While the data is downloading, we can add that to a variable to preserve it and when it finishes downloading, we can use the 'writeFile' method of 'fs' module to create a file from the data downloaded. This can be done in the follwoing way:
+	//invoking the request method and passing it the options
+	var req = https.request(options, function(res){
+		res.on('data', function(chunk){
+			responseBody += chunk;
+		});
+		res.on('end',function(){
+			fs.writeFile("George-Washington.html", responseBody, function(err){
+				if(err){
+					throw err;
+				}
+				console.log("File downloaded and written");
+			});
+		});
+	});
+
+Additionally, we can use some properties like:
+	'res.statusCode' to get the status code
+	'res.headers' to get the header data
+
+We can build web servers using nodejs, using http and https modules. However, if we want to create a https server, we would need a security certificate. To create a web server, we would use the createServer() method, which can be assigned to a variable and invokes a callback method. The parameters of the callback function are 'request' sent to the server and the 'response' that the server is sending back to the client. This might look like this:
+	var server = http.createServer(function(request,response){
+		response.writeHead(200,"Content-type":"text/plain");
+		response.end("Hello, World!");
+	});
+	server.listen(3000);
+	console.log("Server Listening to port 3000");
+This creates the response as "text/plain" as in this case we are sending back plain text. If we would sent back 'html' file, then the response would be "text/html". Also, after creating the server we are listening to port 3000 for any incoming connections. The last line of code is just for us to make sure that the server is running.
+
+In this case, we are just serving normal text. However, we can also serve file. To do that we need to use our http module along with our 'fs' module. Like before we use 'createServer' method to to create the server. Then we use the 'fs' module to invoke 'readFile' method for the html file that we have in our server. We write the code for that like this:
+	if(req.url === '/'){
+		fs.readFile("./public/index.html","UTF-8", function(err, html){
+			res.writeHead(200, {"Content-type": "text/html"});
+			res.end(html);
+		});
+	}
+Additionally, we can responde to an error message if the client didn't request for the home page. This will work as a error handling method:
+	else{
+		res.writeHead(404, {"Content-type":"text/plain"});
+		res.end("404 File not found");
+	}
+However, these will only work for home page and all other pages/files requested will get an error message. So, if the website requests for a particular file as css file, we can use 'path', 'fs', and 'http' modules together. First, we can create a regular expression conditional to see if the requested url matches a particular file type. Then we need to create a path to the file requested by the join() method, then we need to create an instance of readStream with that file path and, only if the file is text, the type of encoding. Then we would use the writeHead method of http module with 'content-type' being the type of file, for css: text/css, for jpg: image/jpeg. Then we 'pipe' the stream that we created earlier to the response variable.
+	if(req.url.match(/.css$/)){
+		var cssPath = path.join(__dirname, "public", req.url);
+		var fileStream = fs.createReadStream(cssPath, "UTF-8");
+		res.writeHead(200, {"Content-type":"text/css"});
+		fileStream.pipe(res);
+	}
+Through 'http' module, we can also send JSON data like an API. For that we would need the JSON file ready in the file system, which we will be able to send to client, once they request for it. First we need to import http module and the JSON file. To this we as previously done, use createServer() method with a callback fucntion that has two parameters: request and response. Then inside the callback we invoke the writeHead() method on the response and pass success code of 200 and "content-type" of "text/json". Also at the end of the response  we pass the stringify format of the data from the JSON. 
+	ar http = require("http");
+	var data = require("./data/inventory");
+	http.createServer(function(req,res){
+	  res.writeHead(200, {"Content-type":"text/json"});
+	  res.end(JSON.stringify(data));
+	}).listen(3000);
+This however return the complete JSON data; if we want the data to be filtered on a specific parameter, we can check for the that in the url with an conditional statement. If the conditions are met, it will invoke a function and pass that function the response. Then we create a variable, which will an array containing all the objects that match particular condition. To do this, we invoke the filter() method on the JSON data, which will in turn invoke a callback function. The callback will return a boolean value by checking for the condition. The whole thing may look something like this:
+	if(req.url === "/instock"){
+    	listInStock(res);
+	}
+	function listInStock(res){
+	  var inStock = data.filter(function(item){
+	    return item.avail === "In stock";
+	  });
+	  res.end(JSON.stringify(inStock));
+	}
+
+Till this far we have been working with only 'GET' method of HTTP. However, there are other methods that can be done through http. One of those is the 'POST' method. This methods means posting something to the http connection, usually done through 'forms' in html. In the html, the 'form' element takes two attributes, action and method. This method would have a value of 'post', which means when the user clicks 'submit' in the webpage this form sends the information of the form to the web server through http connection. We can check in our javascript file whether the request method is "POST"; if it is, then we can create a variable with empty body and listen to 'data' event on request, which will invoke a callback function. The callback will have a parameter of "chunk" and within the function we will concatenate the chunk with the empty body variable. Once the reading is done, we can also listen to 'end' event which will invoke another callback function, then writeHead() on response and may send back a html with the information just received through "POST". For example:
+	if(req.method === "POST"){
+	    var body = "";
+	    req.on('data', function(chunk){
+	      body += chunk;
+	    });
+	    req.on('end', function(){
+	      res.writeHead(200, {"Content-Type": "text/html"});
+	      res.end(`
+	        <DOCTYPE html>
+	        <html>
+	          <head>
+	            <title>Form Results</title>
+	          </head>
+	          <body>
+	            <h2>Your Form Result</h2>
+	            <p>${body}</p>
+	          </body>
+	        </html>
+	      `);
+	    });
+	  }
+
+NPM Packages
+------------
+Till this far we have been working with node.js core modules. However, the reason nodejs is so powerfult is for the open-source community and libraries. We can look for these modules and install those from the command prompt. We can install the packages locally(for a specific project) or globally (for the computer). To install locally, we need to go to that directory and type in the following command:
+	npm install <packageName>
+To install a package globally, we need to type in the following command:
+	npm install -g <packageName>
+On MAC/Linux we may have to include 'sudo' command got give it permission to install in system directories. To check for all the packages installed in a directory, we can type:
+	npm ls
+To uninstall a package we can type:
+	npm remove <packageName>
+
+Package.json
+------------
+All NPM (Node Package Manager) packages contain a file, usually in the project root, called package.json file. package.json contains all the information of your web app.It contains all the metadata{set of data which describes and gives info about all other data}. It is the first file your browser looks for, to find all the information of your web app. This includes 'dependencies' that is other modules that this module uses. package.json provides a simple way to keep track of packages that are being used in application. We can create the package.json file using the following command:
+	npm init
+This command will guide us through the creation of the json file. Once created we can install dependencies and include that automatically in the json file with the following command:
+	npm install <dependencyName> --save
+However, if we choose to share our app, we don't want to share it along with the dependencies. Because that will make it large. So, at this point, we can go ahead and delete all the dependencies MANUALLY from the explorer. However, as the names required to run the app will stil be in the json file, when we want to install the dependencies necessary to run it, we can just go to the console and type the following command to install all the dependencies in a single shot:
+	npm install
+If we want to remove a package and update that in our json file, we can type:
+	npm remove <packageName> --save
+
+Expess Module
+-------------
+After we install our dependencies in the folder we are working on, we can 'require' them in the app. In this case, after installing the express module, we can require it in the following way: 
+	var express = require("express");
+
+Then we can create an instance of the express constructor like: 
+	var app = express();
+
+Then to create a static server we can use a middleware method called 'static' like this:
+	app.use(express.static("./public"));
+
+"./public" is the location of the files that we want to host. Then we need the express server to listen to a port like this:
+	app.listen(3000);
+
+Then just to make sure that we can use this app in other apps, we need to export it:
+	module.exports = app;
+
+To log the requests from the client, we use a middleware and invoke a function. This function has three parameters: request, response and the next command. To log the requests we can use:
+	app.use(function(req,res,next){
+		console.log(`${req.method} request for '${req.url}'`);
+		next();
+	});
+
+In the server, if we get 'http' 'get' requests we will send out the reply of that get request:
+	app.get("/dictionary-api", function(req,res){
+		res.json(skierTerms);
+	});
+If the api and app are in different domain name, they will not work. To make them work, we use another module, called CORS. This is a piece of middle ware to solve the problem for us. To add the cors module:
+	var cors = require("cors");
+
+CORS is a function, which will return some middleware. To use the cors in our app, we write this: 
+	app.use(cors());
+
+Till this far we have been catering the "GET" http request through our files. However, there can be other types of requests sent from the clien to the server. The other methods that HTTP can cater are:
+	1. GET: Used to retrieve information from server
+	2. HEAD: Similar to GET but transfers status and header section only
+	3. POST: Used to send data to the server
+	4. PUT: Replaces all current representations with uploaded content
+	5. DELETE: Used to delete data from server
+	6. CONNECT: Creates a tunnel to server
+	7. OPTIONS: Describes communication options
+	8. TRACE: Performs a message loop-back test along the path to the target resource.
+
+Apart from GET, another very important HTTP method is the POST. Under this method, the client sends some information, usually through HTML forms or file upload, to the server. This information then needs to be used/catered. However, the information that is passed to the server from the client is not directly usable because it will be URL encoded and needs to be parsed before using it. To help us in parsing the data received, we can use another nodejs module, called 'body-parser'. We require this module like following:
+	var bodyParser = require("body-parser");
+
+There are two commands that we can use to parse data based on the type of data that received. The first command will convert JSON data to usable format and the second command will convert url encoded data to usable format. The urlencoded() method takes a parameter that is "extended: false", which will be true only if we need to parse nested POST data. The data sent to us can be in either of two format: 
+	1. JSON: app.use(bodyParser.json());
+	2. URLEncoded: app.use(bodyParser.urlencoded({extended: false}));
+
+In addition to parsing the data, we also need to define additional routes for POST, similar to the one we did for GET method.
+	app.post("/dictionary-api", function(req.res){
+		//pushes the received req to the array
+		skierTerms.push(req.body);
+		//then response with the updated skierTerms
+		res.json(skierTerms);
+	});
+
+To add a DELETE route, we would also need the item name that we want to delete from the array/JSON. To identify that we use ":term" in the route paramenter before the callback function, which will as before will have request and response as its parameters. Inside the callback function we use the filter() method, which takes another callback function (predicate function, which returns boolean). This callback will be invoked for every item found in the arrray. Inside this predicate function, we will check each item in the array with the request received by the server from the client. And then after filtering the item and creating a new json from it, we will responde to the client with the new skierTerms, like this:
+
+	app.delete("/dictionary-api/:term", function(req,res){
+		skierTerms = skierTerms.filter(function(definition){
+			return definition.term.toLowerCase() !== req.params.term.toLowerCase();
+		});
+		res.json(skierTerms);
+	});
+
+Websockets
+----------
+Websockets is an advanced technology that helps client and server communicate with each other in real time by keeping a connection open to transfer data. Before introducing the websockets, there were no way to push information from the server to the client. The client had to check continuously make requests to the server to see if there is any change in the state of the server, this method is called 'Polling'. Another method is "long polling", where the client send requests and if there is no change the server let it timeout; however, if there is any change it replies with the changed data. That is to say, 'long polling' is efficient 'polling'. However, with websockets a continuous connection is maintained between the server and the client. So, anytime any of the data is updated in the server, all the other clients get updated data as well. For example, this can be useful in case of chatting apps, where the chat log gets updated in real time for all the users. 
+
+We can use the websocket module by requiring the "ws" module, like this:
+	var WebSocketServer = require("ws");
+
+However, this only gives access to the module itself. What we may want to do is to have access to the Server() constructor that lies inside the module. So, we may modify our 'require' statement little bit, like this:
+	var WebSocketServer = require("ws").Server;
+
+Then we need to create an instance of the server with 'new' keyword. We also need to pass a port number to the constructor. For example:
+	var wss = new WebSocketServer({port: 3000});
+
+We can add an event listener on "connection" event and write a callback on that. This call back will be fired everytime a client connects to the server. So, whatever we write within the callback function will be executed for all the individual connections made to the server.
+	wss.on("connection", function(ws){
+	  ws.send("Welcome to cyber chat");
+	});
+
+However to work with websockets, we also need to configure our client, which we can do through the javascript file that run on the browser. In the javascript file, first we need to create an instance of WebSocket, like:
+	var ws = new WebSocket("ws://localhost:3000");
+
+We can run a function when the websocket opens connection. Like:
+	ws.onopen = function(){
+		document.querySelector("h1").innerHTML = "Connected";
+	}
+
+We can also run a function when the websocket connection is closed:
+	ws.onclose = function(){
+		document.querySelector("h1").innerHTML = "Disconnected";
+	}
+We can also run a function we receive a message:
+	ws.onmessage = function(payload){
+		var p = document.createElement("p");
+		p.innerText = payload.data;
+		document.querySelector("div_message").appendChild(p);
+	}
+
+When an user enters an input, we can capture the input and in a function and send it to the websocket. To do this, we need to first listen to an "onsubmit" event, to which we need to assign a function call, which in turn will send the message back to the server. For example:
+	document.forms[0].onsubmit = function(){
+		var input = document.getElementById("message");
+		ws.send(input.value);
+		input.value = "";
+	}
+On the server side, we also need to an event listener for "message" event, which will fire a callback function with "message" as parameter. This event listener and callback should be inside the original "connection" event listener that we created previously. Inside the message event listener, we check whether the message equals "exit"; if it does, then we close the websocket connection using "ws.close()". However, if the message doesn't equal 'exit', then we can access the list of all the client connected to the websocket using "wss.clients", which is an array of clients. So, on this array we can run loops and send the message to each of the clients with forEach and a callback function. The complete code may look like this (including the original "connection" event listener:
+	wss.on("connection", function(ws) {
+		ws.on("message", function(message){
+			if(message === "exit"){
+				ws.close();
+			} else{
+				wss.clients.forEach(function(client){
+					client.send(message);
+				});
+			}
+		});
+		ws.send("Welcome to cyber chat");
+	});
+
+A problem with websocket is that some of the old browsers don't support it. To mitigate this problem, we can use a module 'socket.io', which uses websocket by default but if the browser doesn't support websocket then it uses long polling. To create a socket.io instance, we would need the express module and the http module along with the socket.io module. However, the socket.io module is actually a function; so, we need to pass it a the name of the server that it need to listen to. So, we need to create the server first with http and express modules and then we are going to pass the socket.io the server we just created. We can do these like:
+	var express = require("express");
+	var http = require("http");
+	var app = express();
+	var server = http.createServer(app).listen(3000);
+	var io = require("socket.io")(server);
+
+Then we can creat a static server with express(as we have done before):
+	app.use(express.static("./public"));
+Then like before, we would listen to new connections-event and within the callback function with connection-event we need to "emit" a new type of event, in this case, called "message". Along with the event, we are also emitting a message. Also, the socket paramenter need to listen to another event "chat" and invoke a callback function with "message" being the parameter. Inside this callback, we are going to broadcast this message to all the clients. For example:
+	io.on("connection", function(socket){
+		socket.on("chat",function(message){
+			socket.broadcast.emit("message",message);
+		});
+		socket.emit("message", "Welcome to Cyber Chat!");
+	});
+
+On our client-side, we need to add a client file. This file need to be linked with the html. We can download this file from socket.io or "npm install socket.io client".
+
+On our client-side, we also need to configure our original javascript file. In the main js file, we add a new variable for socket and listen to the server like this:
+	var socket = io("http://localhost:3000");
+
+Then we can listen to "connect" event and invoke a callback function. 
+	socket.on("connect", function() {
+		setTitle("Connected to Cyber Chat");
+	});
+We can also listen to "disconnect" event and invoke another callback function. 
+	socket.on("disconnect", function() {
+		setTitle("Disconnected");
+	});
+Another event that we can listen to is the "message" event, also connected to a callback function. 
+	socket.on("message", function(message) {
+		printMessage(message);
+	});
+
+Finally, we need to listen to a "submit" event, which should include an emit method to emit a "chat" event and pass the input.value. For example:
+	document.forms[0].onsubmit = function () {
+	    var input = document.getElementById("message");
+	    printMessage(input.value);
+	    socket.emit("chat", input.value);
+	    input.value = '';
+	};
+
+Useful NPM Packages
+-------------------
+node-dev: Automatically restarts the app when saved
+jshint: Checks JS code for any issues and problems
+	jshint, by default, considers ES6 codes as errors. To avoid this we need to include a comment in the JS file:
+		/* jshint esnext: true */
+httpster: Create simple static http server
+	The command for this is:
+		httpster -p 3000 -d ./public/
+express: Most popular node framework for dynamic server
+cors: (Cross Origin Resource Sharing) Open our API to share with other domain
+body-parser: parses the request received on POST method
+socket.io: used to make websockets
+mocha
+jasmine
+jaster
+qunit
+
+
+Try and Catch
+-------------
+	try{
+
+	} catch(){
+
+	}
 
 References:
 -----------
 Nodejs Documentation: https://nodejs.org/api/
+HTTP Methods: https://www.tutorialspoint.com/http/http_methods.htm
+Node Package Manager (NPM): https://www.npmjs.com/
 Javascript Essential Training - Simon Allerdice
 Up and Running with ECMAScript 6 - Eve Porcello
 Up and Running with Git and GitHub - Ray Vilalobos
