@@ -1,0 +1,373 @@
+Learning VBA in Excel
+=====================
+Curt Frye in Lynda.com
+======================
+Introduction to VBA
+-------------------
+VBA is a Object Oriented Programming Language. An object in OOP includes:
+	1. Properties: Make, Model, Color, Year, Price
+	2. Methods: Start, Drive, Park
+	3. Events: On_start, on_parked, on_brake
+Everything in Excel is an object and the whole concept is called Excel Object Model. This model is really large; so, lets just look at a few of the objects that are in Excel:
+	Application Object:
+		properties: 
+			Version, Caption, Default file path, Workbooks
+		Methods:
+			Calculate, CheckSpelling, Quit
+		Events:
+			SheetCalculate, NewWorkbook, WorkbookBeforeClose.
+	Workbook Object:
+		Properties:
+			Name, Sheets, Saved
+		Method:
+			Close, PrintOut, Save
+		Events:
+			BeforeClose, NewSheet, BeforeSave
+	Worksheet Object:
+		There are two types of worksheets in a workbook. Worksheets and chartsheets. 
+		Properties:
+			name, UsedRange, Visible
+		Method:
+			activate, copy, delete
+		Events:
+			activate, deactivate, change
+
+Properties of VBA Code
+----------------------
+To give the vba codes some name or to protect the vba code by password we can use the properties of vba code found in in the vba editor> tools> vba properties. This dialoague box  has two tabs. We can name our vba projects a meaningful names so that we can come back to it at a later time, it is helpful. On the protection tab we can secure the code by putting a password.
+
+Subroutine vs Function
+----------------------
+The difference is Function returns a value but subroutine doesn't. This means you can't refer to a subroutine in vba worksheets. The subroutine starts with a keyword "sub" and ends with keywork "End sub". Additionally, after the sub keyword we need to put in the name of the subroutine. Also after the name of the subroutine, we need to put parenthesis () within which we can also put in paramenters that we want to pass to the subroutine. 
+
+The functions can be declared similarly but with "Function" keyword at the begining and "End Function" at the end. The function paraments also need to be declared along with thier types. For example:
+	Function BROKER (total as currencty) as double
+		BROKER = total * 0.15
+	End Function 
+There is a convention in VBA that you assign the result to a variable that has the same name as the function. In this example, we are getting the parameter total from the user and multiplying it with 0.15 and putting the result in BROKER, which we will return indicated by "as double".
+
+Visibility of Macro
+-------------------
+There are two types of visibility of VBA Macro. 
+	1. Public: Can use a subroutine in all open excel files. Include the keyword "public" or dont include any word
+	2. Private: Can NOT use subroutine only in the excel file it is in. Include keyword "private"
+
+Commenting
+----------
+Single quotations are used for commenting in VBA. Everything on the right of the quotation marks is commented on that line. 
+	'this is a comment on excel VBA
+
+Running a Macro
+---------------
+There are a few ways that we can run a macro. 
+	1. We can go to the VBA Editor and press F5 to run a subroutine
+	2. We can click View > Macros > View Macro > Run
+	3. Link it to a shape/button. Create a shape > right click on the shape > assign macro > select a macro
+	4. We can customize the "Quick Access Toobar" to add a macro
+
+Data types
+----------
+The data types that VBA Support are:
+	1. Boolean
+	2. Byte: 1 byte
+	3. Char: 2 byte
+	4. Date: 8 byte
+	5. Decimal: 16 byte
+	6. Double: 8 byte
+	7. Integer: 4 byte
+	8. Long: 8 byte
+	9. Object: 4 byte (32-bit system)
+			   8 byte (64-bit system)
+   10. SByte: 1 byte
+   11. Short: 2 byte
+   12. Single: 4 byte
+   13. String: Depends
+   14. Uinteger: 4 byte
+   15. ULong: 8 byte
+   16. UShort: 2 byte
+   17. Currency: 8 byte
+   18. Variant: Numeric or Character.
+
+Declaring Variable
+------------------
+To declare a variable in VBA we use the keyword "Dim", which is a short form of dimension or giving something a dimension. The syntax for declaring variable one at a time:
+	Dim <name> as <type>
+If we want to declare multiple variable with the same statement is to have the name and type of all variables. 
+	dim <name1> as <type>, <name2> as <type>
+
+If we do not declare a variable but use it, VBA will create a variable with the same name for us and assign a value of 0 to that. We can avoid this by explicit declaration in the declaration section, which is at the top of a module. We can type "option explicit" to make the programmer declare all the variables explicitly, otherwise it will throw an error. 
+
+Managing Variable Scope
+-----------------------
+The area over which a variable is visible/accessile is called a scope. Usually the scope of a variable is a subroutine. So, all the variables declared within a subroutine are only accessible within that subroutine, not outside. 
+
+However, we can also declare global variable, which has a scope of all the subroutine and functions. We can declare a varibale to have global scope by declaring it in the decrlaration section at the top of the module. The syntax is exactly same. However, we can't assign value to varible in the declaration section, which will cause an error. 
+
+Static Variable and Constants
+-----------------------------
+When we create a variable with "dim" keyword, the value of the variable resets to its default value, that is 0 (zero), every time we run the subroutine. However, if we want to retain the value of the variable until the workbook is closed, we can use the keyword 'static' instead of 'dim'.
+	static <variableName> as long
+You can't create global static variable, that is declaring variable in the declaration section. 
+
+Another, important thing is the cosntants. To declare a constant we can use 'const' keyword. We can declare constants globally. However, we can declare the same constant with the same name within a subroutine and it will only have the scope of the subroutine. 
+
+Mathematical Operators
+----------------------
+	 = 		assign a value
+	 + 		addition
+	 - 		subtraction
+	 *		multiplication
+	 /		division or decimal division
+	 ^		exponentiation (power)
+	 \		integer division
+	 Mod 	Modular division
+
+Arrays
+------
+Arrays help us to work with a set of values. We declare an array similar to the way, we declare the variables. However, in addition to that we also declare the size of how many items that we want to keep in the array. The syntax for declaring array is
+	Dim <variableName> (5) as Currency
+One more thing to remember is that the program starts counting the number from zero. To assign value to each of the elements of the array we can type each of the elements and assign value to those. Otherwise, we can read values from a range of cells from worksheet. To do that we can select a cell using VBA and then loop through the array to assign or collect the values from the range of cells.
+
+We can also create 2 dimensional array. We can declare 2-D arrays with similar method. The only difference is that the in case of 2D array, there would be both number of rows and number of columns defined. The syntax for that would be:
+	Dim <variableName> (5, 6) as Currency
+
+We can also create dynamic array with Dim statement; at the time of creation, we just leave the parenthesis blank. After that, we may ask the user to input the size of the array and put that into a variable. After that we need to 'ReDim' our array with the size variable.
+
+Object Variables
+----------------
+Object variable can be workbook, worksheet, or range of cells. We need to create an object with specific type, for example:
+	Dim wks as Worksheet
+
+Then we need to set the value of the variable with 'Set' command. Like this:
+	Set wks = ThisWorkbook.Worksheets("Sheet1")
+
+After setting the value we can refer to the worksheet with the variable name and we can modify its properties with the variable now. This is very handy if we are changing a lot of properties of the object.
+	wks.Tab.Color = vbRed
+
+With...End With Statements
+--------------------------
+If we want to change multiple properties of a single object in VBA, we can use the With...End With statemetns. For example, if we want to modify the font properties of a particular cell we can write:
+	Range("A1").Select
+	With Selection.Font
+		.Name = "Calibri"
+		.Size = 11
+	End With
+
+For...Next Loop
+---------------
+We can run loop with For...Next structure. If we want to change the increment by to something else, we can use the step command along with the for loop. Its syntax look like:
+	For iCounter = 0 to 5 Step 2
+		shippingCharges(iCounter) = ActiveCell.Offse(iCounter, 1).value
+	Next iCounter
+
+We can also run negative steps or decrement; however, for that we need to make sure the for loop goes to a number below the intial value.
+
+For...Each Loop
+---------------
+If we have a collection of objects and want to loop through each item of the collection, we can use forEach loop. There are two things that we need to keep in mind.
+	1. The array itself is defined as String
+	2. The variable that is used to step through is Variant
+
+The syntax for the for...each loop is:
+	For Each <variable_variant> In <array_as_string>
+		MsgBox(var)
+	Next var
+
+Do Loop
+-------
+Do loop construction is used when we want our loop to continue running until a certain condition is met. The basic syntax for Do loop is:	
+	Do
+		If ActiveCell.Value = "" Then Exit Do
+		ActiveCell.Offset(1,0).Activate
+	Loop
+
+We can also run two variants of this Do loop. One is Do...Until loop, which does something until a condition is met. In this construct, we dont have to check for a condition within the loop. So, we can rewrite the above loop like this:
+	Do
+		ActiveCell.Offset(1,0).Activate
+	Loop Until ActiveCell.Value = ""
+
+Another variation of the Do loop is the Do...While loop. This is similar to the Do...Until loop. However, it does something while the condition meets. The syntax for a Do...While loop is:
+	Do
+		ActiveCell.Offset(1,0).Activate
+	Loop While ActiveCe.Value <> ""
+
+Condition: If...Then
+--------------------
+There are two basic ways of writing If Statements. The first one is the IIF statement, which have the exact same structure as the If statement found in Excel Worksheets. So, its syntax would be:
+	IIF(condition, action_if_true, action_if_false)
+
+Then there is a another type of If Statement that contains a If followed by a condition, followed by keyword "Then" followed by some action. 
+	If ActiveCell.Value >= 1000 Then MsgBox("Great Sale")
+
+We can also include an "Else" statement with the if statement. The syntax for this is:
+	If ActiveCell.Value >= 1000 Then
+		MsgBox("Great Sale")
+		Else
+			MsgBox("Not a great sale")
+	End If
+
+If we have no Else statement, then the action performed HAS to be in the same line. However, If there is an Else statement then the action of the If Statment has to be moved to a new line.
+
+If we have more than 2 conditions. Then we can use the Elseif Statement. 
+	If ActiveCell.Value >= 1000 Then
+		MsgBox("Great Sale")
+		Elseif ActiveCell.value >= 500 Then
+			MsgBox("Moderate Sale")
+		Else
+			MsgBox("Not a good sale")
+	End If	
+
+Case Statement
+--------------
+If we want to change the value of variable based on the value of another variable, then the Case Statement would be really compact and handy compared to the if statement. For example:
+	Select Case curTotal
+	Case Is >= 1000
+		MsgBox("Great Sale")
+	Case Is >= 500
+		MsgBox("Moderate Sale")
+	Case Else
+		MsgBox("Not a good Sale")
+	End Select
+
+Writing to Cell
+---------------
+We can use two methods to write to a cell:
+	1. Range("<CellAddress>")
+	2. Cells(RowNumber, ColumnNumber)
+
+We use the "Value" property along with either of these methods. 
+	Range("B2").Value = "Hello"
+ 
+Cut and Paste data from one place to another, takes some steps:
+	1. Activate the sheet(Worksheets("2010").Activate)
+	2. Selecting the range/cells that we want to cut/copy (Range("B7:D15").Select)
+	3. Running the cut command on Selection (Selection.Copy)
+	4. Activating the cell where we want to paste (Sheets("Summary").Select)
+	5. Running the paste command(ActiveSheet.Paste)
+	6. Deactivate CutCopyMode (Application.CutCopyMode = False)
+
+Concatanation of text and string in VBA is done using the symbol "&". For example:
+	fullMessage = strPart1 & variable1 & strPart2 & "%."
+
+We can split string sections using three functions:
+	1. Left(string, <numberOfChar>)
+	2. Mid(string, <startChar>, <numberOfChar)
+	3. Right(string, <numberOfChar)
+
+Managing Worksheets
+-------------------
+Display Worksheet: 	Worksheet("Sheet3").Activate
+					Worksheet(2).Activate
+Add Worksheet:		Sheets.Add
+					Sheets.Add After:=Worksheets(Sheets.Count)
+					Sheets.Add After:=Worksheets("Sheet3")
+Rename Worksheet:	Worksheets("Sheet1").Name = "Form"
+Delete Worksheet:	Worksheets("Sheet1").Delete
+					(include to disable error messages Application.DisplayAlerts = False)
+
+Managing Workbooks
+------------------
+Open Worksbook		Workbooks.Open("Workbook1.xlsm")
+Activate Workbook 	Workbooks("Workbook1.xlsm").Activate
+Save Workbook 		Workbooks("Workbook1.xlsm").Save
+SaveAs Workbook 	Workbooks("Workbook1.xlsm").SaveAs Filename:="Wrkbk1.xlsm"
+New Workbook 	 	Workbooks.Add
+
+Advanced Elements
+-----------------
+Stop screen updating	Application.ScreenUpdating = False
+Wokrsheet function 		Application.WorksheetFunction.Sum(Range("A1:A3"))
+Input Box 				InputBox("Where is the number")
+						InputBox("Which cell", Type:=8)
+Message Box				MsgBox("Your commission is" & variablName)
+						MsgBox("Want to quit?", vbYesNo)
+
+Sub from sub 			call the name of subroutine without ()
+
+Events Handling
+---------------
+We can call a subroutine whenever we open a workbook, like:
+	Private Sub Auto_Open()
+		MsgBox("Welcome")
+	End Sub
+
+We can also run a subroutine before closing a workbook, like:
+	Private Sub WorkbookBeforeClose(Cancel as Boolean)
+		Worksheets("Sheet1").Range("F5").Value = "" Then
+			MsgBox("Please Enter a value")
+			Cancel = True
+		End If
+	End Sub
+
+We can also run a subroutine when user tries to save a workbook, like:
+	Private Sub WorkbookBeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+		Answer = MsgBox("Save?", vbYesNo)
+		If Answer = vbNo Then Cancel = True
+	End Sub
+
+We can also listen to any changes made to the worksheet, like
+	Private Sub Worksheet_Change(ByVal Target As Range)
+	Dim intResponse as Integer
+	intResponse = MsgBox("Are you sure?", vbOKCancel)
+	if intResponse = 1 Then
+		MsgBox("Value Changed")
+	Else
+		Application.EnableEvents = False
+		Application.Undo
+		MsgBox("Not Changed")
+		Application.EnableEvents = True
+	End If
+	End Sub
+
+Running Macro on Key Combination
+--------------------------------
+If we want to run a macro on press of a key comination, we can't do that in the macro itself rather we have to create another subroutine where we can call the other macro/subroutine. Like this:
+	Private Sub Workbook_Activate()
+		Application.OnKey "{F4}", "<nameOfMacro>"
+	End Sub
+We can choose the key that we want to press to run the macro from the list at the "Important Link" section of this text file.
+
+
+Finding a Value
+---------------
+We can look for a particular value or string in a worksheet with 'Find' method. The subroutine may look like:
+	Cells.Find(What:="string", LooAt:=xlWhole).Activate
+This returns the address of the cell; so, we can write "Activate" directly on that. Remember that assigning a macro to a key sequence will overwrite the default key sequence.
+
+Debugging
+---------
+On Error GoTo 0: Default behaviour, throws error
+
+On Error GoTo Handler: Define Handler at the bottom and before that include "Exit Sub", this should also be included after all Handlers that we define.
+
+On Error Resume Next: Easiest but least helpful. Tries to skip the line and move on with the next line.
+
+Move through VBA code one step at a time: F8
+
+While doing the walkthrough we can hover over a variable and it will show the value of the variable, after it has been executed
+
+Stop stepping through: Click Reset (stop) or Press F5 (continue)
+
+Step over some code (runs a set of code together): Shift + F8 
+
+Step out of some subroutine: Ctrl + Shift + F8
+
+Setting Break points (runs till the point and wait): Click on bar on left of line of code
+
+Immediate window: View > Immediate Window or Ctrl + g
+
+Value check in immediate window: "?variableName" to check the value of the variable at any point in execution
+
+Sending Output to immediate window: Debug.Print variableName
+
+Watching a value: Debug > Watch > Expression (variable/expression) > Ok 
+
+To stop infinite loop: Ctrl + C
+
+Create code module: insert > modules
+A property can be an object, reference to an object, or reference to a collection of object.
+
+Important Links
+---------------
+http://support.microsoft.com/kb/213660/EN-US/
+Key use reference: http://msdn.microsoft.com/en-us/library/aa195807(office.11).aspx
