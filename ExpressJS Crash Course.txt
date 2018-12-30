@@ -1,0 +1,278 @@
+ExpressJS Crash Course
+=============================================
+Brad Traversy - Traversy Media on YouTube.com
+=============================================
+https://www.youtube.com/watch?v=gnsO8-xJ8rs
+=============================================
+Date: 28 December 2018
+=============================================
+
+What is ExpressJS
+-----------------
+It is a minimalistic, open source web framework for Node.js. It is used to build powerful web applications and APIs. It is one the most web framework for nodejs. It uses MVC concepts.
+
+Installing  Express
+-------------------
+To install expressjs you will need to have nodejs and npm already installed in your computer. Npm is automatically installed along with nodejs. Once you have nodejs and npm, go to command prompt and type:
+	npm init
+
+Executing this command in the application/project will initiate the package.json file, which is the application information file required for all applications. 
+
+Another useful command is to install express. We can install express in the application folder itself or globally. If we want to install express module for the application only:
+	npm install express --save
+
+If we want to install express globally, which means the the module will be available to all the projects we would create.
+	npm install express -g
+
+Here the '-g' modifier instructs to install the module globally; on the other hand the modifier '--save' instructs to save the information of the module to the 'package.json' file.
+
+Import Express
+--------------
+To use express module in an application, first we need to import that from the module. To do this, we can use the following piece of code in our application file:
+	var express = require("express");
+
+So, we are importing the module and assigning that to a variable. The 'express' module basically exports a function in the express module. So, the variable where we are assinging the express module is a function of express module. So, now we need to create an application using the function variable we just created. 
+	var app = express();
+
+Now we need to listen to any connection on the application that we just created and open up a port for the listening. When the server starts listening there is a call back function that will be invoked.
+	app.listen(3000, function(){
+		console.log("Server listening on port 3000");
+	});
+
+Running Application
+-------------------
+After we have created an application, we can run the application by executing a command in command prompt.
+	node <nameOfApp>
+
+For example, if we name our application file as app.js, we would write:
+	node app.js or node app
+
+Accessing the Server
+--------------------
+After the applicaion is run using the 'node <nameOfApp>' command, we can go to any web browser and type in the word "localhost" followed by a colon(:) which is followed by the listening port number that we wrote in our "listen" command in the application file.
+	localhost:<portNumber>
+
+GET Request
+-----------
+When we enter the address of a website and press enter, what we are sending to the server is a http "GET" request. We are asking the server to get something, usually a html webpage. So, in the server, we need to identify this "GET" request and send back the information or file that the client is requesting. To do this we use the "get" method of the express server. This get method has two parameters. The first parameter is the "route" or "address" that has been requested by the client and send paramenter is a callback function. This call back function takes two parameters. The first parameter of the callback function is the request that was sent from the client to the server and the second parameter is the response that the server will send back to the client. So, the line of code in the server might look something like the following:
+	app.get("/", function(request, response){
+		response.send("Hello, World");
+	});
+
+Here, in the callback function we are invoking another method on the response. That is to say, we are sending our response and the response would be "Hello, World". So, in this case the server is not sending back any html/css/javascript file rather it is sending back plain text. Now, if we request the localhost webpage from our browser, we would see "Hello, World" printed out in our browser. 
+
+
+
+Middleware
+------------------
+Middleware are basically functions that have access to the request object and response object of the callback function and also the next function in the application's request-response cycle. The next function is the a function in the Express router which, when invoked, executes the middleware after the current middleware. Middleware can perform the following tasks:
+	1. Execute any code
+	2. Make changes to the request and response objects
+	3. End the request-response cycle
+	4. Call the next middle in the stack
+
+We can create our custom made middleware functions with Express. We can create the middleware like anyother functions but there are some structural differences. A middleware function takes three parameters: reqeust, response, and next. Request represents the request object, resposne represents the response object and the next represents invoking the next middleware function in the stack. Within the middleware function we can write the code for whatever we want to do and at the bottom line of the middleware (before the closing braces) we need to invoke the next() method to call the next middleware.
+
+	var logger = function(request, response, next){
+		console.log("Logging");
+		next();
+	}
+
+However, even if we have the above code in the applicaton, its not going to execute because we haven't invoked this middleware anywhere in the code. To run this piece of middleware, we need to invoke it using a "use" method. 
+	app.use(logger);
+
+The placement of the middleware matters in executing. Middleware functions that are loaded first are executed first. If the middleware is loaded after the route to the path through the "get" method, then the middleware will never execute because the request-response cycle is terminated with the "get" method.
+
+We can also use third-party middlewares. However, to use those middlewares, like our custom made middlewares, we need to use the "use" method. If we are going to use a middleware from the "body-parser" module, we would need to write:
+	app.use(bodyParser.json());
+
+Sharing Static Files
+--------------------
+We can share static files using a piece of middleware from the express module coupled with another module, called path. So, we will generate the path of our static files using the path module and then pass that address to the static method of the express module.
+
+The general expectation is that the application that we are writing is in the same folder where the static files are kept. So, to get the to complete address of the hosted files we can join the address of the current directory(the directory where the application is saved) with the name of the directory that containst the hosted files (the folder is expected to be in the same parent directory as the application). So, if the name of the directory is "public", the middleware invoking may look like:
+	app.use(express.static(path.join(__dirname, "public")));
+
+Sending JSON
+------------
+If we have a javascript object in the server and we want to send it over to the client we can use a "json()" method on the response and in the parenthesis of the "json" method we can inser the javascript object which will be send to the client. So, if we have a javascript object like following:
+	var person = {
+		name: "Hussain",
+		age: 32
+	}
+
+Then can send this object formatted in json using the following piece of code:
+	app.get("/", function(request,response){
+		response.json(person);
+	});
+
+body-parser Module
+------------------
+This is a set of body parsing middleware. This is used to parse incoming "request" bodies in a middleware before the handlers; these middlewares parse the data received in different formats and convert those to usable formats for the next middleware or function. The "body-parser" module provides four types of parser, which are:
+	1. JSON body parser: app.use(bodyParser.json());
+	2. Raw body parser
+	3. Text body parser
+	4. URL-encoded form body parser: app.use(bodyParser.urlencoded({extended:false}));
+
+
+Template Engine - EJS
+---------------------
+Install: npm install ejs --save
+
+After that we need to set our view engine for the application:
+	app.set('view engine', 'ejs');
+
+Also, we need to specify the directory we want to use for the views:
+	app.set('views', path.join(__dirname, "views"));
+
+In the "views" directory mentioned above, we need to have *.ejs files for the view. Then in the application file again, we need to "render" the file *.ejs file instead of "sending" using the response:
+	app.get("/", function(reqeust, response){
+	  response.render("index");
+	});
+
+In this case, this command is responding with the "index.ejs" file that is stored within the "views" folder within the current directory. 
+
+We can also pass javascript objects along with the *.ejs file using the render method that we have been using recently. To use the objects, we need to adjust our code of the application as well as the *.ejs file that we are sending back to the client. In the application file, we can insert an object after the file name using curly brackets {}, like this: 
+	response.render("index",{
+	  title: 'Customers'
+	});
+
+This will send the javascript object along with the file. Additionally, in the *.ejs file we need to specify where this "title" will be used. The way we can specify that is following:
+	<h1><%= title %></h1>
+
+Here, we are specifying that the title will be a 'h1' tag and the title will be loaded from the javascript object we have sent along the file.
+
+If we have some snippet of html code that we are repeting in our webpage, we can put those in a seperate file and load them from the main *.ejs file. If we have a header portion and a footer portion that will be exactly same for all the web pages we have then it is more efficient to put those in two seperate files and load from those files in to the main file. For example, we have a header file and a footer file that are kept in a folder called "partials", then we can write in the "index.ejs" file:
+	<% include partials/header.ejs %>
+	  <h1><%= title %></h1>  
+	<% include partials/footer.ejs %>
+
+If you notice, in the 'h1' tag there is a '=' sign after the first '%'. This is because we are using the value of the title in this place. However, when we are just including the header and the footer, it is similar to a function or executable command; so, we dont include the equal sign. 
+
+We have seen that we can pass a single object or string using the render method. Additionally, we can also send arrays of objects using the same method. 
+	response.render("index",{
+	  title: 'Customers',
+	  users: users
+	});
+
+However, the index.ejs file that we have will also need to be modified to accomodate this array of objects. In the index file, we can put in javascript codes that will be executed and we can also put in values that will be displayed without executing. Additionally, we can also put in the html codes in the same file. If we are putting in javascript codes that will be executed, we need to enclose that with in the <% %> symbols. If we are putting in values to be extracted from the javascript object we need to enclose each of the values with <%= %> symbols. However, if we want to use any of the html tags or codes, we don't need to enclose that within anything.
+	<ul>
+	<% users.forEach(function(user){ %>
+		<li><%= user.first_name %> <%=user.last_name %></li>
+	<% }) %>
+	</ul>
+
+Form and Input
+--------------
+A very important part of a website is getting inputs from the users. One of the very popular technique to get input from the users is to use the "form" in web pages. So, there will be a form and a submit button. When the user press the submit button it will send the information in the form to the server. To capture the input from the user using a form, we need to specify a method attribute and an action attribute for the form tag. The method is usually "POST" because we want to send some data to the server. The action attribute is usually the route where we want to submit the data.
+
+Back in our applicaton in the server, we need to capture this method similar to the get method. In the post method in the server, we again refer to the route that has been submitted with the form followed by a callback function, which has two parameters: request and response.
+	app.post("/users/add",function(request,response){
+	  console.log(request.body);
+	});
+
+Form Validation
+---------------
+When we receive data through the form, we might want to validate those before using it. There is a middleware that work with Express, called 'express-validator'. To install 'express-validator' we can type in 
+	npm install express-validator --save
+
+First we need to require it:
+	var expressValidator = require('express-validator');
+
+To use the validator, we need to set the errorFormatter with the following code:
+	// In this example, the formParam value is going to get morphed into form body format useful for printing.
+	app.use(expressValidator({
+	  errorFormatter: function(param, msg, value) {
+	      var namespace = param.split('.')
+	      , root    = namespace.shift()
+	      , formParam = root;
+
+	    while(namespace.length) {
+	      formParam += '[' + namespace.shift() + ']';
+	    }
+	    return {
+	      param : formParam,
+	      msg   : msg,
+	      value : value
+	    };
+	  }
+	}));
+
+After this we need to go to our post method and check for any errors that don't meet the criteria. We need to run checkBody method on request, which will get two parameters. The first parameter will be the field name that we want to check and the second parameter is the error message for this particular rule. This whole piece of code need to be followed by a dot notation followed by the rule checker method. For example, if we want to check whether the first_name is empty, we can write the following piece of code:
+	req.checkBody("first_name","First Name is required").notEmpty();
+
+If this rule is voilated, then this will set an error flag to the request object, which we can retrieve with the validationErrors() method. So, we can assign the error flag to a variable and check whether that error flag is true or false. For example:
+	var errors = req.validationErrors();
+	if(errors){
+		//do something if there is error
+	} else {
+		//do something else if there is no error
+	}
+
+When we have errors, we can send back the error information back to the client using the render method that we used earlier. 
+	response.render('index',{
+      errors: errors
+    })
+
+To display these error messages in the html file, we also need to add this to our *.ejs file. This will use the error that we send back to the client. Similar to what we have done before, we can display the message based on whether that is a executable code, a value or html element. For example:
+	<% if(errors != undefined){ %>
+      <ul>
+        <% errors.forEach(function(error){ %>
+          <li><%= error.msg %></li>
+        <% }); %>
+
+      </ul>
+
+  <% } %>
+
+Howeve, to send this to the client we need to declare the "errors" variable as global. To declare a variable as global, we need to put that into a middleware:
+	app.use(function(request,response,next){
+		response.locals.errors = null;
+		next();
+	});
+
+MongoDB
+-------
+show databases: 		show dbs
+create database:		use customerapp
+create collection:		db.createCollection('users')
+show collections:		show collections
+insert data:			db.users.insert([{first_name:'John',last_name:'Doe',email:'jdoe@yahoo.com'},{first_name:'Hussain',last_name:'Islam',email:'mhisajib@gmail.com'}])
+show all data 			db.users.find()
+
+After running the insert data command, a "BulkWriteResult" will show up where "nInserted" will show how many records have been inserted.
+
+MongoJS
+-------
+To use MongoDB with node.js server we need to use a third party module called 'Mongojs'. Install this module:
+	npm install mongojs
+
+Then we need to require the mongojs module:
+	var mongojs = require("mongojs");
+
+Then we need to create a database using the database and collection names:
+	var db = mongojs('customerapp',['users']);
+
+If we want to find everything that is in our collection:
+	db.users.find(function(error,docs){
+		response.render("index",{
+	      title: 'Customers',
+	      users: docs
+	    });
+	});
+
+If we want to insert a user into the database:
+	db.users.insert(newUser,function(error,result){
+		if(error){
+			console.log(error);
+		}
+		response.redirect("/");
+	});
+
+Here, we instead of sending back the hardcoded object, now we are sending back the information directly from our database.
+
+Reference
+---------
+Middleware: https://expressjs.com/en/guide/using-middleware.html
+express-validator: https://devhub.io/repos/ctavan-express-validator
+MongoDB: https://www.mongodb.com/download-center/community

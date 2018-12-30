@@ -1,0 +1,35 @@
+Express Essential Training
+==========================
+Emmanuel Henri from lynda.com
+=============================
+What is Express.js
+------------------
+Express or Express.js is a framework for Node.js environment to work as the backend of web development. 
+
+Intial Node server Setup with Express
+-------------------------------------
+First create a directory where we want to create the server. Then we can run the following command in the command line:
+	npm init
+This will create the package.json file in the folder. Then we will need to install the dependencies. 
+	npm install express nodemon --save
+
+We also need to install dev-dependencies.
+	npm install --save-dev babel-cli babel-preset-env babel-preset-stage-0
+
+Then open the package.json file and delete "test" property and include the following line to replace that:
+	"start": "nodemon ./index.js --exec babel-node -e js"
+
+Then create a ".bablerc" file with the bable settings. In that file, we can write the following code:
+	{
+	  "presets":[
+	    "env",
+	    "state-0"
+	  ]
+	}
+
+Then create a new file, called "index.js", this is the file that we entered in package.json. So, if we change the name to something else, we need to change the name in the package.json file as well.
+
+
+Resources
+---------
+Express Website: http://www.expressjs.com
