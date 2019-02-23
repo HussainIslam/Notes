@@ -1,0 +1,42 @@
+Write Templates Like A Node.js Pro: Handlebars Tutorial
+=======================================================
+webapplog.com [programming weblog]
+===========================================
+https://webapplog.com/handlebars/
+===========================================
+Handlebars is a logicless templating language. This is an extension of the Mustache templating language. It keeps our views and codes seperate. Handlebars was made so that developers can’t write a lot of JavaScript logic inside the templates. This helps to keep templates lean and related strictly to the representation of the data.
+
+Variables
+---------
+A Handlebars expression is {{, some content, followed by }}, hence the name of the library (see the resemblance to handlebars on a bicycle?). For example, the template would look like this:
+	<h1>{{title}}</h1>
+	<p>{{body}}</p>
+
+The data might look like this:
+	{
+		title: "Express.js Guide",
+		body: "The Comprehensive Book on Express.js"
+	}
+
+This would render to:
+	<h1>Express.js Guide</h1>
+	<p>The Comprehensive Book on Express.js</p>
+
+Iteration with 'each'
+---------------------
+In handlebars, we can cycle through each of the items of objects and arrays using a keyword 'each'. In the block of code, we can refer to each of the members of the object with keyword '@key' and members of an array with keyword '@index'. Additionally, each item can be referred to as 'this' for array. In case of objects, this is not necessary as property name is used to refer to the value of the property. The code snippet in the template might look like:
+	<div>
+	{{#each languages}}
+	  <p>{{@index}}. {{this}}</p>
+	{{/each}}
+	</div>
+
+The data for the template:
+	{languages: ['php', 'node', 'ruby']}
+
+This will compile to:
+	<div>
+	  <p>0. php</p>
+	  <p>1. node</p>
+	  <p>2. ruby</p>
+	</div>

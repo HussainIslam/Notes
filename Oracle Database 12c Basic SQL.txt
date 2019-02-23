@@ -1,0 +1,356 @@
+Oracle Database 12c: Basic SQL
+==============================
+David Yahalom on Lynda.com
+==============================
+What is SQL
+-----------
+It is short for Structured Query Language is a programming language to access data stored in oracle databases. SQL is like a API that run between the interface and the actual database. There are three types of operation:
+	1. Run Queries
+	2. Modify Data
+	3. Modify Objects
+
+Data types
+----------
+There are data types in Oracle:
+	1. Number
+	2. VARCHAR2 (variable character for string)
+	3. Date
+
+Structure of Query
+------------------
+Select ... (field name or * for all columns)
+From ... (table name)
+Where ... (optional, condition to filter records)
+
+The need for semi-colon at the end of a query depends on the interface we will use. Oracle SQL Developer does not require the semi-colon.
+
+Select keyword
+--------------
+To show all columns:
+select *
+from employees
+
+To get first name, last name and salary: 
+Select first_name, last_name, salary
+from employees
+
+To show specific rows:
+Select first_name, last_name, salary
+from employees
+where salary > 10000
+
+To add multiple conditions:
+Select first_name, last_name, salary, department_id
+from employees
+where salary > 10000
+and (department_id=100
+or department_id=80)
+
+To add condition of string:
+Select first_name, last_name, salary, department_id
+from employees
+where first_name like 'E%'
+	(first name starts with 'E', % means one or more letters)
+
+To add condition of range of values:
+Select first_name, last_name, salary, department_id
+from employees
+where salary between 5000 and 10000
+
+Another way for multiple value conidtion:
+Select first_name, last_name, salary, department_id
+from employees
+where job_id in ('IT_PROG','AD_VP')
+
+Multiple value excluding condition:
+Select first_name, last_name, salary, department_id
+from employees
+where job_id not in ('IT_PROG','AD_VP')
+
+Filter using dates:
+Select first_name, last_name, salary, department_id
+from employees
+where hire_date > to_date('01-JAN-2000',DD-MON-YYYY)
+
+Filter out duplicates:
+select distinct department_id, job_id
+from employees
+	(distinct keyword looks for unique combinations of data)
+
+Calculated field:
+select first_name, last_name, salary * 1.15
+from employees
+	(we can also use + - * /)
+
+Column aliases:
+select first_name, last_name, salary * 1.15 as "Salary + bonus"
+from employees
+	(alises must be in double quotes only if there is whitespace in the alias name)
+
+Show table properties:
+desc[ribe] employees
+
+Sort output (ascending):
+select first_name, last_name, salary
+from employees
+order by salary
+
+Sort output (descending):
+select first_name, last_name, salary
+from employees
+order by salary desc
+	(desc here not to be confused with the desc for describe)
+
+Sory by multiple fields:
+select first_name, last_name, salary
+from employees
+order by salary asc, department_id desc
+
+Functions
+---------
+Function in SQL allows us do manipulations and calcualtions on input values. There are two major types of functions:
+	1. Scalar Functions: These functions operate on a single value and return a single value. 
+	2. Aggregate Functions: Operates on a group of values and returns a single value.
+
+Trancate a string withina string:
+select substr(job_title,1,5) from jobs
+	(parameters are column name, start position, number of char)
+
+Return the length of string:
+select first_name, length(first_name)
+from employees
+
+String concatanation:
+select concat(fist_name, last_name)
+from employees
+
+Alternative to concat function:
+select first_name || ' ' || last_name
+from employees
+
+Convert string to lower case:
+select lower(first_name)
+from employees
+
+Convert string to upper case:
+select upper(first_name)
+from employees
+
+Locate the position of substring in a string:
+select first_name, last_name, instr(phone_number,'416')
+from employees
+
+To add padding to a field (left padding):
+select lpad(first_name,10,'*')
+from employees
+	(parameters are field name,total number of characters, and the padding character)
+
+To add padding to a field (right padding):
+select rpad(first_name,10,'$')
+from employees
+	(parameters are field name,total number of characters, and the padding character)
+
+Convert number to string:
+select to_char(salary,'L99G999')
+from employees
+	(L99G999 is the formatting mask, L is for local currencty)
+
+Convert date to string:
+select to_char(hire_date,'DD/MM/YYYY')
+from employees
+
+Print literals to screen:
+select 'hello, World!'
+from dual
+	(dual is a dummy table in the background)
+
+Rounding numbers:
+select round(salary,3)
+from employees
+
+Truncate numbers:
+select trunc(salary, 3)
+from employees
+
+Retrieve current date and time:
+select sysdate
+from dual
+
+View the current time stamp:
+select systimestamp
+from dual
+	(have more precision about time)
+
+Calculate months between two dates:
+select sysdate, hire_date, months_between(sysdate,hire_date)
+from employees
+
+To add spcified number of month to date:
+select add_months(sysdate,1)
+from dual
+
+SQL Joins
+---------
+This joins data from two different tables. 
+
+select employees.first_name,employees.last_name, deparment.department_name
+from employees join departments
+on employees.department_id = department.department_id
+
+Inner join (common values) same as only join:
+select employees.first_name,employees.last_name, deparment.department_name
+from employees inner join departments
+on employees.department_id = department.department_id
+
+Left join (all value from left table and common value):
+select employees.first_name,employees.last_name, departments.department_name
+from employees left join departments
+on employees.department_id = departments.department_id
+
+Right join (all value from right table and common value):
+select employees.first_name,employees.last_name, departments.department_name
+from employees right join departments
+on employees.department_id = departments.department_id
+
+Full outer join (all record from both table)
+select employees.first_name,employees.last_name, departments.department_name
+from employees full join departments
+on employees.department_id = departments.department_id
+
+Oracle's Propertory Join ()
+select employees.first_name,employees.last_name, departments.department_name
+from employees, departments
+where employees.department_id(+) = departments.department_id
+	(the (+) sign indicates whether it is a left join or right)
+
+Data Manipulation
+-----------------
+DML is Data Modification Language. There is another type of language DDL that is Data Definition Language.
+
+Creating table:
+create table table_name(
+	col_name_1 varchar2(100),
+	col_name_2 number(5)
+)
+
+Insert data;
+insert into table_name values('Hello',50)
+insert into table_name(col_name_1,col_name_2) values('Hello',50)
+
+Rollback the changes:
+rollback
+
+Making the changes persistent:
+commit
+	(any rollback commands after the commit will rollback the data to the last commit)
+
+Transactions
+------------
+Transactions are basically the rows/data of the table that we insert. 
+
+Delete rows:
+delete from test_table
+where col1='hello'
+	(running delete from command without where will delete all the records from data; this is DML command; so we can rollback)
+
+Update a row:
+update test_table
+set col1='updated value'
+where col2=11
+
+Delete all the rows:
+truncate table test_table1
+	(more efficient, this is a DDL command and we cant rollback)
+
+Adding column in table:
+alter table test_table
+add (column_name number (10))
+
+Delete column in table:
+alter table test_table
+drop column column_name
+
+Aggregate Functions
+-------------------
+This type of functions allow us to perform a set of values and return a one value. For example:
+	1. avg:
+		select avg(salary)
+		from employees
+	2. count
+		select count(*)
+		from employees
+	3. min
+		select min(salary)
+		from employees
+	4. max
+		select max(salary)
+		from employees
+	5. sum
+		select sum(salary)
+		from employees
+
+However, we can't just use aggregate functions and normal columns together. To use those together we need to use the "Group by" keyword.
+
+Group by a field:
+select count(*) as NUM_Employees, department_id
+from employees
+group by department_id
+order by department_id
+
+Average with group:
+select avg(salary), department_id
+from employees
+group by department_id
+
+Filtering group recodes: 
+select avg(salary), department_id
+from employees
+group by department_id
+having avg(salary) > 9000
+	(where applies to individual items, having applies to group)
+
+Constraints
+-----------
+Primary keys:
+create table demo_table(
+	col1 number (5) primary key,
+	col2 varchar2(20))
+
+Not null:
+create table demo_table(
+	col1 number (5) primary key,
+	col2 varchar2(20)not null) 
+
+Check:
+create table demo_table(
+	id number(4), name varchar2(50),
+	constraint check_uppercase_name
+	check(name = upper(name))
+)
+
+Foreign key:
+create table products(
+	id number(10) not null,
+	name varchar(40) not null,
+	supplier_id number(10) not null,
+	constraint fk_supplier
+	foreign key(supplier_id)
+	references suppliers(id)
+)
+
+Subqueries or inline view:
+select * from departments
+where department_id = (
+	select department_id from departments
+	where department_name = 'Marketing'
+)
+
+select * from (
+	select first_name, last_name from employees
+	where salary > 10000
+)
+
+Resources
+---------
+Oracle App Development Virtual Machine: https://www.oracle.com/technetwork/community/developer-vm/index.html
+

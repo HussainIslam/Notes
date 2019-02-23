@@ -1,0 +1,253 @@
+PHP Programming Lanugage
+========================
+FreeCodeCamp.org on youtube.com
+===============================
+https://www.youtube.com/watch?v=OK_JCtrrv-c&t
+=============================================
+What is PHP
+-----------
+PHP is a object-oriented language that is use in the webserver. This is a very popular language to build websites and web applications.
+
+Installing and setting up
+-------------------------
+Download: https://windows.php.net/download#php-7.3
+Download the thread safe version according to your windows version. The extract the zip file to a folder. Then include address of the extracted folder in the windows system variables. To check whether the php folder is added to the environmental variable, open command line and type: php -v. If php is installed, it should return the version details of php.
+
+Starting php webserver
+----------------------
+In the command line type:
+	php -S localhost:4000
+this will start a webserver and listen to 4000 port. Now you can open a browser and type in 'localhost:4000' to access the server. However, as we don't have any files in there, we will not see anything except a php ribbon.
+
+Create php files
+----------------
+Php files are basically similar to html files but it has extension of "php". So, the file name should look like this:
+'site.php'. In this file we can include a html skeleton and insert php codes in it surrounded by php tag:
+	<?php to start the tag
+	?> to end the tag
+Between the php tags write:
+	echo("Hello, World!");
+This is php command that will print out "Hello, World" to the html document. Now, if we go to:
+	localhost:4000/site.php
+we should see the "Hello,World!" written. What echo does is send html codes to the browser. So, we can also type in any valid html, which will be render in the browser:
+	echo "<h1>Hello, World!</hr>"
+
+variables
+---------
+To create a variable in php, we start the name of the variable with $. 
+	$characterName = "John";
+	$characterAge = 35;
+If we want to use the variable within the script name, we include the name of variable after $:
+	echo "Once there was a man named $characterName";
+You can change the value of the variable any time in the program.
+
+Data types
+----------
+php support the following data types:
+	1. string
+	2. Numbers
+		a. integer
+		b. float
+	3. Boolean
+	4. Null
+
+Strings
+-------
+strtolower(string/variable) 		to convert to lower
+strtoupper(string/variable)			to convert to upper
+strlen()							returns the size
+$variable[1]						accesse the 2nd letter 
+str_replace("old","new","whole")	replace a piece of sting
+substr($source,start,[howmany])		returns a substring
+
+Numbers
+-------
+Operator
+	+	Addition
+	-	Subtraction
+	*	Multiplication
+	/	Division
+	%	Modulous
+Math Functions
+	abs(number)			absolute value
+	pow(base,exponent)	exponent
+	sqrt(number)		square root	
+	max(2,10)			maximum
+	min(2,10)			minimum
+	round(3.2)			rounding
+	ceil(3.1)			round up
+	floor(3.1)			round down
+
+Getting User input
+------------------
+We get inputs from the user through HTML forms. So, we can setup a user form in our php file and give it proper action (the name of the file/route) and method (could be GET or POST). Then under insert our php tag (<?php ?>) under the form and then we can echo out the contents of the form within the php tag like this:
+	<?php echo $_GET["username"] ?>
+
+The "username" here is the actually the "name" of the input field in the form that we are echoing out.
+
+URL Parameter
+-------------
+When we use the "GET" method, the input field parameters are going to show in the url of the link. This is not secure. So, we might want to use the "POST" method. However, if we change the form method from "GET" to "POST", we have to change the code in the php tag as well:
+	<?php echo $_POST["name"] ?>
+
+Array
+-----
+Array in php can store mixed types of data.
+Creating Array:
+	$friends = array("Kevin","Karen","Oscar","Jim");
+Access individual Element:
+	echo $friends[1];
+size of array:
+	echo count($friends);
+
+Checkboxes
+----------
+We can create checkboxes like we usually do in the html. However, in the 'name' attribute, we should include a '[]' after the name of the group like this:
+	<input type="checkbox" name="fruits[]" value="apples">
+This will create an array with name 'fruits' in php and store all the values that are checked into the array. So, now we can echo out the array like this:
+	<?php $fruits = $_POST["fruits"]
+		echo fruits[0];
+	?>
+Notice that we are not including the [] brackets in after the POST. Also, we are echoing out the first element of array of checked items.
+
+Associative Arrays
+------------------
+We can store series of key-value pairs. So, in a sense it is like javascript objects. We create an associative array like this:
+	$grades = array("Hussain"=>"A+", "Pam"=>"B+", "Oscar"=>"C+");
+Then we can access this array with the name of the key:
+	echo $grades["Hussain"];
+However, remember that the key has to be unique;
+
+Functions
+---------
+The syntax for functions in php is:
+	function func_name($parameter){
+		return something;
+	}
+
+If..else if...else statements
+-----------------------------
+Syntax for If statements:
+	if(boolean condition){
+		//do something;
+	} else if(another bool condition){
+		//do something;
+	} else{
+		//do something;
+	}
+
+Switch...case statement
+-----------------------
+The syntax for switch statement:
+	switch(value){
+		case value1:
+			//do something;
+			break;
+		case value2:
+			//do something;
+			break;
+		default:
+			//do something else;
+	}
+
+While loop
+----------
+The syntax for while loop statement:
+	while(boolean condition) {
+		//do something;
+	}
+
+Do...while loop
+---------------
+The syntax for do...while loop statement:
+	do{
+		//do something;
+	}while(boolean condition);
+
+For loop
+--------
+The syntax for 'for' loop:
+	for($i = 0; i < 5; i++){
+		//do something;
+	} 
+
+Include other file in php
+-------------------------
+We can include other .html files using php. We can create a template of parts of the website that we want to reuse and then just include those file in the php code:
+	<?php include "header.html" ?>
+
+We can also include other php files that has variables and functions inside it. Then we will be able to use those variables and functions in other php files.
+
+For example: If we have a file called "useful-tools.php" that has the following code snippet:
+	<?php
+		$feeInMile = 5280;
+		function sayHi($name){
+		echo "Hello $name";
+		}
+	?>
+Now, we can use these in other php files like this:
+	<?php include "useful_tools.php";
+      sayHi("Hussain");
+    ?>
+
+Classes in php
+---------------
+Syntax for creating classes:
+	class Book {
+		var $title;
+		var $author;
+		var $pages;
+	}
+We instantiate the class like:
+	$book1 = new Book;
+	$book1->title = "Harry Potter";
+	$book1->author = "JK Rowling";
+	$book1->pages = 400;
+
+Then we access the data members like following:
+	echo $book1->author;
+
+Constructors
+------------
+It is a function that gets called whenever we want to create an object. This constructor has to be inside the class. Also it has to named "__construct()". It has the syntax like following:
+	function __construct($pTitle,$pAuthor,$pPages){
+		$this->title = $pTitle;
+		$this->author = $pAuthor;
+		$this->pages = $pPages;
+	}
+
+Object Functions
+-----------------
+Object functions are any other functions that are inside the class declarion. for example:
+	function bigBook(){
+		if($this->pages > 300){
+			return "true";
+		} else {
+			return "false";
+		}
+	}
+
+Visibility Modifiers
+--------------------
+We can hide data members from any code outside the class declaration by changing the visibility modifiers of the class variables. 
+	public variable_name 
+		the keyword "public" makes the variable public. We can also use keyword "var" to make the variables public.
+	private variale_name
+		the keyword "private" hides the variable from any code outside the class.
+If we have set visibility modifiers for any variable, we would need two additional functions: getter and setter functions. Like this:
+	function getPages(){
+		return $this->pages;
+	}
+or a a getter function:
+	function setPages($page){
+		$this->pages = $page;
+	}
+
+Inheritence
+-----------
+We use inheritence to use code from one class in another class. We do this like:
+	class derived_class extends base_class{
+		//additional code
+	}
+
+We can also overload a function by basically giving the derived class a function with the same name that the base class has. But the overloaded function may do something different.

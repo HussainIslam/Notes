@@ -1,0 +1,7 @@
+Handlebars Training
+===========================================
+Rich Finelli on Youtube.com
+===========================================
+https://www.youtube.com/watch?v=2sXjmewEQOY
+===========================================
+Handlebars is a logicless templating language. This is an extension of the Mustache templating language. It keeps our views and codes seperate. 
